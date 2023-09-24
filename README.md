@@ -1,10 +1,10 @@
 <<<<<<< HEAD
 # CheatChat
-A flutter app for chattiing anonymously with new people
+A flutter app for chatting anonymously with new people
 =======
 
 A chat application
 
-## Getting Started
+### Getting Started
 
 >>>>>>> 5329ac7 (Initial commit)
