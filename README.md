@@ -1,2 +1,2 @@
 # CheatChat
-# A flutter app for chattiing anonymously with new people
+A flutter app for chattiing anonymously with new people
