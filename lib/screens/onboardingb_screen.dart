@@ -17,13 +17,11 @@ class _OnBoardingBScreenState extends State<OnBoardingBScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     super.deactivate();
   }
 

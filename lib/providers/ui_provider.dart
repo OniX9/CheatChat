@@ -35,7 +35,7 @@ class UIProvider with ChangeNotifier {
   }
 
   // OnBoading Screen
-  bool _startChatButtonState = true;
+  bool _startChatButtonState = false;
   bool get startChatButtonState => _startChatButtonState;
 
   void toggleStartChatButton() {
@@ -45,7 +45,7 @@ class UIProvider with ChangeNotifier {
 
   int _chatActionButtonState = 0;
   get chatActionButtonType =>
-      ChatActionButtonTypes.values[_chatActionButtonState];
+      ChatActionStateTypes.values[_chatActionButtonState];
 
   void updateStartChatButtonState() {
     _chatActionButtonState >= 2
@@ -55,4 +55,4 @@ class UIProvider with ChangeNotifier {
   }
 }
 
-enum ChatActionButtonTypes { endChat, youSure, newChat }
+enum ChatActionStateTypes { endChat, youSure, newChat }

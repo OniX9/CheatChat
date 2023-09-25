@@ -1,3 +1,4 @@
+import 'dart:io' show sleep;
 import 'package:flutter/material.dart';
 import 'package:cheat_chat/globals.dart';
 import 'package:cheat_chat/widgets/onboarda_bottomSheet.dart';
@@ -15,35 +16,41 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen>
-    with TickerProviderStateMixin {
-  late AnimationController controller = AnimationController(
+    with SingleTickerProviderStateMixin {
+  bool animationLock = true;
+  late AnimationController controller1 = AnimationController(
     vsync: this,
-    upperBound: 400,
+    upperBound: 630,
     lowerBound: 30,
-    duration: const Duration(milliseconds: 1500),
+    duration: const Duration(milliseconds: 3000),
   );
 
   animateBottomSheetFully() {
-    controller.addListener(() {
+    /// Animates bottom sheet half
+    ///
+    ///
+    controller1.addListener(() {
       setState(() {
-        controller.value;
+        if (controller1.value>= 340 && animationLock){
+          controller1.stop(canceled: false);
+        }
       });
     });
-    controller.reverse();
+    controller1.forward();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.forward();
+    animateBottomSheetFully();
   }
 
   @override
   void deactivate() {
     // TODO: implement deactivate
     super.deactivate();
-    controller.dispose();
+    controller1.dispose();
   }
 
   @override
@@ -53,23 +60,26 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
       Visibility(
         //fills up avaliable space when FourPets() becomes Invisible,
         // would also be animated to the top.
-        visible: !consumer.startChatButtonState,
+        visible: consumer.startChatButtonState,
         child: Expanded(
           // Make sure flex value is equal to the FourPets()'s Expanded flex value.
-          flex: controller.value.toInt(),
           child: SizedBox(),
         ),
       ),
       Visibility(
-        visible: consumer.startChatButtonState,
+        visible: !consumer.startChatButtonState,
         child: const FourPets(),
       ),
       OnBoardingABottomSheet(
+        bottomSheetAnimatedHeight: controller1.value,
         startchatbuttonCallBack: () {
           setState(() {
             consumer.toggleStartChatButton();
-            animateBottomSheetFully();
+            animationLock = !consumer.startChatButtonState;
           });
+          // sleeps, so UI builds before bottomsheet full render.
+          sleep( const Duration(milliseconds: 70));
+          controller1.forward(from: 342);
         },
       ),
     ];

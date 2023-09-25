@@ -76,15 +76,15 @@ class _LeftActionButton extends StatelessWidget {
       late Color? buttonColor;
 
       switch (chatActionButtonType) {
-        case ChatActionButtonTypes.endChat:
+        case ChatActionStateTypes.endChat:
           label = 'End chat?';
           buttonColor = Colors.red;
           break;
-        case ChatActionButtonTypes.youSure:
+        case ChatActionStateTypes.youSure:
           label = 'You sure?';
           buttonColor = Colors.red;
           break;
-        case ChatActionButtonTypes.newChat:
+        case ChatActionStateTypes.newChat:
           label = 'New chat';
           buttonColor = Colors.blue[900];
           break;

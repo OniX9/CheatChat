@@ -50,7 +50,7 @@ class ProfileBox extends StatelessWidget {
             ),
             AnimatedOpacity(
               opacity: consumer.chatActionButtonType ==
-                  ChatActionButtonTypes.newChat ? 1.0 : 0,
+                  ChatActionStateTypes.newChat ? 1.0 : 0,
               duration: const Duration(milliseconds: 300),
               child: Container(
                 width: 70,

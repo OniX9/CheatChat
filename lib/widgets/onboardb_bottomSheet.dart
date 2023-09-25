@@ -15,18 +15,18 @@ class OnBoardingBBottomSheet extends StatefulWidget {
 
 class _OnBoardingBBottomSheetState extends State<OnBoardingBBottomSheet>
     with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+  late AnimationController bottomSheetAnimatedHeight;
 
   void bottomSheetAnimator() {
-    controller = AnimationController(
+    bottomSheetAnimatedHeight = AnimationController(
       vsync: this,
-      upperBound: 400,
+      upperBound: 345,
       lowerBound: 200,
       duration: Duration(milliseconds: 1300),
     );
-    controller.forward();
+    bottomSheetAnimatedHeight.forward();
 
-    controller.addListener(() {
+    bottomSheetAnimatedHeight.addListener(() {
       setState(() {});
     });
   }
@@ -40,18 +40,17 @@ class _OnBoardingBBottomSheetState extends State<OnBoardingBBottomSheet>
   @override
   void deactivate() {
     super.deactivate();
-    controller.dispose();
+    bottomSheetAnimatedHeight.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var consumer = Provider.of<UIProvider>(context);
-    return Expanded(
-      flex: controller.value.toInt(),
-      child: Center(
-        child: Container(
-          decoration: kRoundedTopBoxDecoration,
-          child: ListView(
+    return Center(
+      child: Container(
+        height: bottomSheetAnimatedHeight.value,
+        decoration: kRoundedTopBoxDecoration,
+        child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 5),
             physics: const NeverScrollableScrollPhysics(),
             children: [
@@ -107,9 +106,7 @@ class _OnBoardingBBottomSheetState extends State<OnBoardingBBottomSheet>
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
+            ]),
       ),
     );
   }
