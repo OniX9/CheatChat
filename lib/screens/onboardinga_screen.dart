@@ -78,7 +78,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
             animationLock = !consumer.startChatButtonState;
           });
           // sleeps, so UI builds before bottomsheet full render.
-          sleep( const Duration(milliseconds: 70));
           controller1.forward(from: 342);
         },
       ),
