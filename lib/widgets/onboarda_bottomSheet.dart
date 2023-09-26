@@ -5,7 +5,6 @@ import 'package:cheat_chat/providers/ui_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:cheat_chat/globals.dart';
 import 'package:cheat_chat/widgets/custom_checkbox.dart';
-import 'package:cheat_chat/screens/onboardinga_screen.dart';
 
 class OnBoardingABottomSheet extends StatefulWidget {
   void Function() startchatbuttonCallBack;

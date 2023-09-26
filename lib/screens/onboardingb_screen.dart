@@ -28,7 +28,7 @@ class _OnBoardingBScreenState extends State<OnBoardingBScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> onBoardingWidgets = [
-      // const FourPets(),
+      const FourPets(),
       OnBoardingBBottomSheet(
         startchatbuttonCallBack: () {
           Navigator.pushReplacementNamed(

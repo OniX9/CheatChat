@@ -36,6 +36,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         animatedBottomSheetHeight = controller1.value;
         if (controller1.value>= 340 && animationLock){
           controller1.stop(canceled: false);
+          // Forces height to stick to 342, incase the UI freezes.
           animatedBottomSheetHeight = 342;
         }
       });

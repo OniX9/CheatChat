@@ -22,7 +22,7 @@ class _OnBoardingBBottomSheetState extends State<OnBoardingBBottomSheet>
       vsync: this,
       upperBound: 345,
       lowerBound: 200,
-      duration: Duration(milliseconds: 1300),
+      duration: Duration(milliseconds: 1230),
     );
     bottomSheetAnimatedHeight.forward();
 
