@@ -5,7 +5,7 @@ import 'package:cheat_chat/widgets/onboardb_bottomSheet.dart';
 import 'package:cheat_chat/widgets/four_pets.dart';
 
 class OnBoardingBScreen extends StatefulWidget {
-  static const String id = '/';
+  static const String id = '/OnBoardingBPage';
 
   const OnBoardingBScreen({Key? key}) : super(key: key);
 
@@ -28,15 +28,15 @@ class _OnBoardingBScreenState extends State<OnBoardingBScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> onBoardingWidgets = [
-      const FourPets(),
+      // const FourPets(),
       OnBoardingBBottomSheet(
         startchatbuttonCallBack: () {
-          Navigator.pushNamedAndRemoveUntil(
+          Navigator.pushReplacementNamed(
             context,
             ChatScreen.id,
-                (route) {
-              return route.settings.name == ChatScreen.id ? true: false;
-            },
+            //     (route) {
+            //   return route.settings.name == ChatScreen.id ? true: false;
+            // },
           );
         },
       ),

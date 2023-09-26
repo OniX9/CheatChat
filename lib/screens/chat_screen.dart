@@ -20,89 +20,94 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     var consumer = Provider.of<UIProvider>(context);
-    return Scaffold(
-      body: Container(
-        decoration: kLinearGradient,
-        child: SafeArea(
-          maintainBottomViewPadding: false,
-          child: ListView(
-            physics: NeverScrollableScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            reverse: true,
-            children: [
-              Container(
-                constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height +
-                        MediaQuery.of(context).padding.top -
-                        kBottomNavigationBarHeight),
-                child: Column(
-                  children: [
-                    Expanded(
-                      flex: 3,
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: IconButton(
-                              padding: const EdgeInsets.only(top: 8),
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                  context,
-                                  OnBoardingBScreen.id,
-                                  //     (route) {
-                                  //   if (route.settings.name == OnBoardingBScreen.id) {
-                                  //     return true;
-                                  //   } else {
-                                  //     return false;
-                                  //   }
-                                  // },
-                                );
-                              },
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                                size: 27,
+    return WillPopScope(
+      onWillPop: ()async{
+        Navigator.of(context).popUntil((route) => route.isFirst);
+        return true;
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: kLinearGradient,
+          child: SafeArea(
+            maintainBottomViewPadding: false,
+            child: ListView(
+              physics: NeverScrollableScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              reverse: true,
+              children: [
+                Container(
+                  constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height-
+                          kBottomNavigationBarHeight),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: IconButton(
+                                padding: const EdgeInsets.only(top: 8),
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(
+                                    context,
+                                    OnBoardingBScreen.id,
+                                    //     (route) {
+                                    //   if (route.settings.name == OnBoardingBScreen.id) {
+                                    //     return true;
+                                    //   } else {
+                                    //     return false;
+                                    //   }
+                                    // },
+                                  );
+                                },
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                  size: 27,
+                                ),
                               ),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: LogoImage(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    //PROFILE CONTAINER
-                    Expanded(
-                      flex: 5,
-                      child: ProfileBox(
-                        userName: 'Anonymous',
-                      ),
-                    ),
-                    // CHAT CONTAINER
-                    Expanded(
-                      flex: 20,
-                      child: Container(
-                        decoration: kRoundedTopBoxDecoration.copyWith(
-                            color: Color(0xFFF2F5F5)),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex: 20,
-                              child: ChatWindow(),
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: ChatInputField(),
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: LogoImage(),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      //PROFILE CONTAINER
+                      Expanded(
+                        flex: 5,
+                        child: ProfileBox(
+                          userName: 'Anonymous',
+                        ),
+                      ),
+                      // CHAT CONTAINER
+                      Expanded(
+                        flex: 20,
+                        child: Container(
+                          decoration: kRoundedTopBoxDecoration.copyWith(
+                              color: Color(0xFFF2F5F5)),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                flex: 20,
+                                child: ChatWindow(),
+                              ),
+                              Expanded(
+                                flex: 5,
+                                child: ChatInputField(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ].reversed.toList(),
+              ].reversed.toList(),
+            ),
           ),
         ),
       ),

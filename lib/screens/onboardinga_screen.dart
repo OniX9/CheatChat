@@ -18,21 +18,25 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen>
     with SingleTickerProviderStateMixin {
   bool animationLock = true;
+  double animatedBottomSheetHeight = 30; // Equate to controller1.lowerBound
+
   late AnimationController controller1 = AnimationController(
     vsync: this,
-    upperBound: 630,
+    upperBound: 640,
     lowerBound: 30,
     duration: const Duration(milliseconds: 3000),
   );
 
   animateBottomSheetFully() {
-    /// Animates bottom sheet half
-    ///
-    ///
+    /// Animates bottom sheet height half way (at 340),
+    /// then fully once animation lock is false,
+    /// animation lock equals the opposite bool of startChatButtonState.
     controller1.addListener(() {
       setState(() {
+        animatedBottomSheetHeight = controller1.value;
         if (controller1.value>= 340 && animationLock){
           controller1.stop(canceled: false);
+          animatedBottomSheetHeight = 342;
         }
       });
     });
@@ -71,13 +75,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen>
         child: const FourPets(),
       ),
       OnBoardingABottomSheet(
-        bottomSheetAnimatedHeight: controller1.value,
+        bottomSheetAnimatedHeight: animatedBottomSheetHeight,
         startchatbuttonCallBack: () {
           setState(() {
             consumer.toggleStartChatButton();
             animationLock = !consumer.startChatButtonState;
           });
-          // sleeps, so UI builds before bottomsheet full render.
           controller1.forward(from: 342);
         },
       ),

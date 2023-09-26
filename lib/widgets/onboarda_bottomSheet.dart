@@ -5,6 +5,7 @@ import 'package:cheat_chat/providers/ui_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:cheat_chat/globals.dart';
 import 'package:cheat_chat/widgets/custom_checkbox.dart';
+import 'package:cheat_chat/screens/onboardinga_screen.dart';
 
 class OnBoardingABottomSheet extends StatefulWidget {
   void Function() startchatbuttonCallBack;
@@ -190,14 +191,9 @@ class _OnBoardingABottomSheetState extends State<OnBoardingABottomSheet> {
               child: MaterialButton(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
+                  Navigator.pushReplacementNamed(
                     context,
                     ChatScreen.id,
-                    (route) {
-                      return route.settings.name == ChatScreen.id
-                          ? true
-                          : false;
-                    },
                   );
                 },
                 color: Colors.blue[800],
