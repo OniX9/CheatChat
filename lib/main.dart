@@ -1,12 +1,4 @@
-import 'package:cheat_chat/screens/chat_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/screens/loading_screen.dart';
-import 'package:cheat_chat/screens/onBoarding/onboardinga_screen.dart';
-import 'package:cheat_chat/screens/onBoarding/onboardingb_screen.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:cheat_chat/providers/ui_provider.dart';
-
+import 'package:cheat_chat/imports/imports.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,12 +20,12 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: LoadingScreen.id,
+          initialRoute: SplashScreen.id,
           theme: ThemeData(
             fontFamily: 'NunitoSans',
           ),
           routes: {
-            LoadingScreen.id : (context) => LoadingScreen(),
+            SplashScreen.id : (context) => SplashScreen(),
             OnBoardingScreen.id : (context) => OnBoardingScreen(),
             OnBoardingBScreen.id : (context) => OnBoardingBScreen(),
             ChatScreen.id : (context) => ChatScreen(),

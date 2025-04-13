@@ -1,8 +1,4 @@
-import 'package:cheat_chat/screens/chat_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/globals.dart';
-import 'package:cheat_chat/widgets/onboardb_bottomSheet.dart';
-import 'package:cheat_chat/widgets/four_pets.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class OnBoardingBScreen extends StatefulWidget {
   static const String id = '/OnBoardingBPage';

@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/widgets/server_chat_hint.dart';
-import 'package:cheat_chat/widgets/chat_bubble.dart';
+import 'package:cheat_chat/imports/imports.dart';
+
 
 class UIProvider with ChangeNotifier {
   // Chat Screen

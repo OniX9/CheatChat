@@ -2,20 +2,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:cheat_chat/screens/onBoarding/onboardinga_screen.dart';
 
-class LoadingScreen extends StatefulWidget {
-  static const String id = '/LoadingScreen';
+class SplashScreen extends StatefulWidget {
+  static const String id = '/SplashScreen';
 
-  const LoadingScreen({Key? key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoadingScreen> createState() => _LoadingScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _LoadingScreenState extends State<LoadingScreen>
+class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
 
-  void bouncingAnimation() {
+  void startBouncingAnimation() {
     controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1350),
@@ -52,7 +52,7 @@ class _LoadingScreenState extends State<LoadingScreen>
   @override
   void initState() {
     super.initState();
-    bouncingAnimation();
+    startBouncingAnimation();
     nextScreen();
   }
 
@@ -75,7 +75,7 @@ class _LoadingScreenState extends State<LoadingScreen>
               child: Container(
                 alignment: Alignment.bottomRight,
                 child: Image.asset(
-                  'images/loading_screen/blur_circle.png',
+                  'assets/images/blur_circle.png',
                   height: controller.value * 1.50,
                   width: controller.value * 1.60,
                 ),
@@ -86,7 +86,7 @@ class _LoadingScreenState extends State<LoadingScreen>
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 83, sigmaY: 83),
               child: Image.asset(
-                'images/cc 1.png',
+                'assets/images/cc 1.png',
                 height: controller.value - 23,
                 width: controller.value - 23,
               ),

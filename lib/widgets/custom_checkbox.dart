@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class CustomCheckbox extends StatefulWidget {
   void Function(bool) onChanged;
@@ -34,9 +33,9 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
         ),
         child: isChecked
             ? SvgPicture.asset(// change to a thicker tick icon svg/ png.
-            'images/onboard_screen/checkbox_checked.svg')
+            'assets/images/checkbox_checked.svg')
             : SvgPicture.asset(// change to a thicker tick icon svg/ png.
-            'images/onboard_screen/checkbox_unchecked.svg'),
+            'assets/images/checkbox_unchecked.svg'),
       ),
     );
   }

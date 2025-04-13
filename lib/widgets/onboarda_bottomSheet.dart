@@ -1,10 +1,4 @@
-import 'package:cheat_chat/screens/chat_screen.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/providers/ui_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:cheat_chat/globals.dart';
-import 'package:cheat_chat/widgets/custom_checkbox.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class OnBoardingABottomSheet extends StatefulWidget {
   void Function() startchatbuttonCallBack;
@@ -33,7 +27,7 @@ class _OnBoardingABottomSheetState extends State<OnBoardingABottomSheet> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           Image.asset(
-            'images/cc 1.png',
+            'assets/images/cc 1.png',
             width: 70,
             height: 70,
           ),
@@ -179,7 +173,7 @@ class _OnBoardingABottomSheetState extends State<OnBoardingABottomSheet> {
             child: Align(
               alignment: Alignment.topCenter,
               child: Image.asset(
-                'images/onboard_screen/crocodile_2.png',
+                'assets/images/crocodile_2.png',
               ),
             ),
           ),

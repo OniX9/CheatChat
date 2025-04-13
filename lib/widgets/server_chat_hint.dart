@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/globals.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class ServerChatHint extends StatelessWidget {
   String chatHint;

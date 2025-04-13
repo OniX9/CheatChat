@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'aligned_pet_image.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class FourPets extends StatelessWidget {
   const FourPets({
@@ -23,28 +22,28 @@ class FourPets extends StatelessWidget {
                   children: [
                     AlignedPetImage(
                       alignment: Alignment.topCenter,
-                      imagePath: 'images/onboard_screen/crocodile.png',
+                      imagePath: 'assets/images/crocodile.png',
                     ),
                     AlignedPetImage(
                       alignment: Alignment.centerLeft,
-                      imagePath: 'images/onboard_screen/pink_sheep.png',
+                      imagePath: 'assets/images/pink_sheep.png',
                     ),
                     AlignedPetImage(
                       alignment: Alignment.centerRight,
-                      imagePath: 'images/onboard_screen/fox.png',
+                      imagePath: 'assets/images/fox.png',
                     ),
                     AlignedPetImage(
                       alignment: Alignment.bottomCenter,
-                      imagePath: 'images/onboard_screen/dog.png',
+                      imagePath: 'assets/images/dog.png',
                     ),
                     AlignedPetImage(
                       alignment: Alignment.center,
-                      imagePath: 'images/onboard_screen/Vector_V.png',
+                      imagePath: 'assets/images/Vector_V.png',
                       isVector: true,
                     ),
                     AlignedPetImage(
                       alignment: Alignment.center,
-                      imagePath: 'images/onboard_screen/Vector_H.png',
+                      imagePath: 'assets/images/Vector_H.png',
                       isVector: true,
                     ),
                   ],

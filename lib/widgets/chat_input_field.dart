@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:cheat_chat/providers/ui_provider.dart';
-import 'package:cheat_chat/globals.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class ChatInputField extends StatelessWidget {
   const ChatInputField({Key? key}) : super(key: key);

@@ -62,11 +62,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/cc 1.png
-    - images/loading_screen/blur_circle.png
-    - images/onboard_screen/
-    - images/onboard_screen/checkbox_checked.svg
-    - images/onboard_screen/checkbox_unchecked.svg    - fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf
+    - assets/images/
+    - assets/fonts/
 
 
   #   - images/a_dot_ham.jpeg

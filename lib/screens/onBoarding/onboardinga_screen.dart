@@ -1,10 +1,5 @@
-import 'dart:io' show sleep;
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/globals.dart';
-import 'package:cheat_chat/widgets/onboarda_bottomSheet.dart';
-import 'package:cheat_chat/widgets/four_pets.dart';
-import 'package:cheat_chat/providers/ui_provider.dart';
-import 'package:provider/provider.dart';
+// import 'dart:io' show sleep;
+import 'package:cheat_chat/imports/imports.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   static const String id = '/OnBoardingAPage';

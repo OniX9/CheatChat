@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/providers/ui_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:cheat_chat/globals.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class OnBoardingBBottomSheet extends StatefulWidget {
   void Function() startchatbuttonCallBack;
@@ -55,7 +52,7 @@ class _OnBoardingBBottomSheetState extends State<OnBoardingBBottomSheet>
             physics: const NeverScrollableScrollPhysics(),
             children: [
               Image.asset(
-                'images/cc 1.png',
+                'assets/images/cc 1.png',
                 width: 70,
                 height: 70,
               ),
