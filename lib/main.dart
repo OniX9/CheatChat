@@ -1,8 +1,8 @@
 import 'package:cheat_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cheat_chat/screens/loading_screen.dart';
-import 'package:cheat_chat/screens/onboardinga_screen.dart';
-import 'package:cheat_chat/screens/onboardingb_screen.dart';
+import 'package:cheat_chat/screens/onBoarding/onboardinga_screen.dart';
+import 'package:cheat_chat/screens/onBoarding/onboardingb_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cheat_chat/providers/ui_provider.dart';

@@ -6,7 +6,7 @@ import 'package:cheat_chat/globals.dart';
 import 'package:cheat_chat/widgets/profile_box.dart';
 import 'package:cheat_chat/widgets/logo_image.dart';
 import 'package:cheat_chat/widgets/chat_input_field.dart';
-import 'package:cheat_chat/screens/onboardingb_screen.dart';
+import 'package:cheat_chat/screens/onBoarding/onboardingb_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String id = '/ChatScreen';

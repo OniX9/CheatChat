@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:cheat_chat/screens/onboardinga_screen.dart';
+import 'package:cheat_chat/screens/onBoarding/onboardinga_screen.dart';
 
 class LoadingScreen extends StatefulWidget {
   static const String id = '/LoadingScreen';
