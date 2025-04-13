@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class ChatBubble extends StatelessWidget {
-  bool isMe;
-  String text;
+  final bool isMe;
+  final String text;
 
-  ChatBubble({
+  const ChatBubble({
     Key? key,
     required this.isMe,
     required this.text,
@@ -12,6 +12,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
@@ -34,12 +35,12 @@ class ChatBubble extends StatelessWidget {
                 )),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 25.0, horizontal: 25),
+              const EdgeInsets.symmetric(vertical: 18.0, horizontal: 20),
               child: Text(
                 text,
                 style: TextStyle(
                   color: isMe ? Colors.white : Colors.black,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
               ),

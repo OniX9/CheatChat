@@ -11,7 +11,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
-    var consumer = Provider.of<UIProvider>(context);
+    var consumer = Provider.of<ChatUIProvider>(context);
     return WillPopScope(
       onWillPop: ()async{
         Navigator.of(context).popUntil((route) => route.isFirst);
@@ -44,14 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                 onPressed: () {
                                   Navigator.pushReplacementNamed(
                                     context,
-                                    OnBoardingBScreen.id,
-                                    //     (route) {
-                                    //   if (route.settings.name == OnBoardingBScreen.id) {
-                                    //     return true;
-                                    //   } else {
-                                    //     return false;
-                                    //   }
-                                    // },
+                                    OnBoardingScreen.id,
                                   );
                                 },
                                 icon: Icon(
@@ -120,7 +113,7 @@ class _ChatWindowState extends State<ChatWindow> {
 
   @override
   Widget build(BuildContext context) {
-    UIProvider consumer = Provider.of(context);
+    ChatUIProvider consumer = Provider.of(context);
     return Container(
       padding: EdgeInsets.only(top: 15),
       child: ListView(

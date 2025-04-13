@@ -5,51 +5,29 @@ class ChatInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UIProvider consumer = Provider.of(context);
+    ChatUIProvider consumer = Provider.of(context);
     return Container(
+      height: 80,
       decoration: kRoundedTopBoxDecoration,
       child: Row(
         children: [
+          _LeftActionButton(),
           Expanded(
-            flex: 3,
-            child: _LeftActionButton(),
-          ),
-          Expanded(
-            flex: 10,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-                right: 25,
-                bottom: 20,
-              ),
-              child: TextField(
-                style: TextStyle(fontSize: 18),
-                onSubmitted: (String newMessage) {
-                  consumer.addChatBubble(
-                    messageText: newMessage,
-                    isMe: true,
-                  );
-                },
-                decoration: InputDecoration(
-                  hintText: 'Type message here...',
-                  hintStyle: TextStyle(color: Colors.grey[400]),
-                  // suffixIcon: IconButton(
-                  //   onPressed: (){
-                  //     consumer.addChatBubble(
-                  //       messageText: newMessage,
-                  //       isMe: true,
-                  //     );
-                  //   },
-                  //   icon: Icon(
-                  //     Icons.send,
-                  //     color: Colors.grey[400],
-                  //   ),
-                  // ),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide.none,
-                  ),
+            child: TextField(
+              style: TextStyle(fontSize: 14),
+              onSubmitted: (String newMessage) {
+                consumer.addChatBubble(
+                  messageText: newMessage,
+                  isMe: true,
+                );
+              },
+              decoration: InputDecoration(
+                hintText: 'Type message here...',
+                hintStyle: TextStyle(color: Colors.grey[400]),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),
@@ -65,7 +43,7 @@ class _LeftActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UIProvider consumer = Provider.of<UIProvider>(context);
+    ChatUIProvider consumer = Provider.of<ChatUIProvider>(context);
 
     Widget chatButtonContent() {
       var chatActionButtonType = consumer.chatActionButtonType;
@@ -87,9 +65,9 @@ class _LeftActionButton extends StatelessWidget {
           break;
       }
       return Container(
-        width: 70,
-        height: 60,
-        margin: EdgeInsets.all(12),
+        width: 55,
+        height: 50,
+        margin: EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: buttonColor,
           borderRadius: BorderRadius.circular(15),
@@ -103,7 +81,7 @@ class _LeftActionButton extends StatelessWidget {
               child: Text(
                 label,
                 textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
           ),

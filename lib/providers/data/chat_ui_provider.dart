@@ -1,12 +1,11 @@
 import 'package:cheat_chat/imports/imports.dart';
 
 
-class UIProvider with ChangeNotifier {
-  // Chat Screen
+class ChatUIProvider with ChangeNotifier {
+  // chat Screen
   List<Widget> chatWidgets = [
     ServerChatHint(
       chatHint: 'You\'re chatting with a stranger. SAY YOUR AGE AND GENDER',
-      isTyping: true,
     ),
     ChatBubble(
       text:
@@ -19,7 +18,6 @@ class UIProvider with ChangeNotifier {
     ),
     ServerChatHint(
       chatHint: 'Tell the stranger your hobbies...',
-      isTyping: true,
     ),
   ];
 
@@ -33,15 +31,8 @@ class UIProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // OnBoading Screen
-  bool _startChatButtonState = false;
-  bool get startChatButtonState => _startChatButtonState;
 
-  void toggleStartChatButton() {
-    _startChatButtonState = !_startChatButtonState;
-    notifyListeners();
-  }
-
+  // ChatScreen
   int _chatActionButtonState = 0;
   get chatActionButtonType =>
       ChatActionStateTypes.values[_chatActionButtonState];

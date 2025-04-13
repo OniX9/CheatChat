@@ -2,11 +2,9 @@ import 'package:cheat_chat/imports/imports.dart';
 
 class ServerChatHint extends StatelessWidget {
   String chatHint;
-  bool isTyping;
 
   ServerChatHint({
     required this.chatHint,
-    required this.isTyping,
     super.key,
   });
 
@@ -25,23 +23,6 @@ class ServerChatHint extends StatelessWidget {
             textAlign: TextAlign.center,
             style: kDescriptionTextStyle.copyWith(
               fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        Visibility(
-          // when text input onChanged is triggered on the
-          // other parties TextField, visiblity should be true.
-          visible: isTyping,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Stranger is typing...',
-                style: kDescriptionTextStyle.copyWith(
-                  fontSize: 14,
-                  color: Colors.blueGrey[200],
-                ),
-              ),
             ),
           ),
         ),

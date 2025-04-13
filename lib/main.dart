@@ -16,18 +16,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => UIProvider()),
+        ChangeNotifierProvider(create: (_) => ChatUIProvider()),
+        ChangeNotifierProvider(create: (_) => OnBoardingUIProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           initialRoute: SplashScreen.id,
-          theme: ThemeData(
-            fontFamily: 'NunitoSans',
-          ),
+          theme:  ThemeData(
+        fontFamily: Fonts.nunitoSans,
+        colorScheme: ColorScheme.fromSeed(seedColor: kAppBlue),
+        useMaterial3: true,
+      ),
           routes: {
             SplashScreen.id : (context) => SplashScreen(),
             OnBoardingScreen.id : (context) => OnBoardingScreen(),
-            OnBoardingBScreen.id : (context) => OnBoardingBScreen(),
             ChatScreen.id : (context) => ChatScreen(),
           }
       ),

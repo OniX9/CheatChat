@@ -1,6 +1,5 @@
 import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:cheat_chat/screens/onBoarding/onboardinga_screen.dart';
+import 'package:cheat_chat/imports/imports.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String id = '/SplashScreen';
