@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ChatUIProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingUIProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

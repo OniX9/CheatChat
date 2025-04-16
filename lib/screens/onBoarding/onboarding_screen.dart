@@ -10,6 +10,7 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
+
   @override
   Widget build(BuildContext context) {
     var uiConsumer = Provider.of<OnBoardingUIProvider>(context);
@@ -43,11 +44,133 @@ class CustomBottomSheet extends StatefulWidget {
 }
 
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
+  final utils = Utilities();
+  final variables = Variables();
+
+  void setOnBoarded() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final hasOnBoarded = await SharedPref().hasOnBoarded();
+    if (!hasOnBoarded) {
+      sharedPreferences.setBool(variables.onBoard, true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var uiConsumer = Provider.of<OnBoardingUIProvider>(context);
+    var userConsumer = Provider.of<UserProvider>(context);
+
+    registerGuest() async {
+      // Checks
+      // 1. Must be 18 or older, and has agreed.
+      if (uiConsumer.is18OrOlder == false && uiConsumer.isAgreed == false) {
+        return;
+      }
+
+      utils.showLoadingScreen(context);
+      var newUser = await userConsumer.apiCreateUser(context);
+
+      if (newUser != null) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          ChatScreen.id,
+          (Route<dynamic> route) => false,
+        );
+        setOnBoarded();
+      }
+    }
+
+    // These widgets are added to the bottom sheet when the user clicks on the start chat button
+    List<Widget> adddedWidgets = [
+      Row(
+        children: [
+          Transform.scale(
+            scale: 1.2,
+            child: CustomCheckbox(
+              onChanged: uiConsumer.toggle18OrOlder,
+            ),
+          ),
+          SizedBox(width: 5),
+          Text(
+            'I am 18 or older',
+            style: kAgreementTextStyle.copyWith(height: 0),
+          ),
+        ],
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Transform.scale(
+            scale: 1.2,
+            child: CustomCheckbox(
+              onChanged: uiConsumer.toggleAgreed,
+            ),
+          ),
+          SizedBox(width: 5),
+          Flexible(
+            child: RichText(
+              // 'By checking the box you agree to our terms and conditions,privacy policy and Guidelines',
+              // style: kAgreementTextStyle,
+              softWrap: true,
+              text: TextSpan(
+                text: 'By checking the box you agree to our ',
+                style: kAgreementTextStyle,
+                children: <TextSpan>[
+                  TextSpan(
+                      text: 'terms and conditions,',
+                      style: kAgreementTextStyle.copyWith(
+                        decoration: TextDecoration.underline,
+                        color: Color(0xFF5F71E5),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          print('clicked Terms and Conditions');
+                        }),
+                  TextSpan(
+                    text: ' ',
+                  ),
+                  TextSpan(
+                      text: 'privacy policy',
+                      style: kAgreementTextStyle.copyWith(
+                        decoration: TextDecoration.underline,
+                        color: Color(0xFF5F71E5),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          print('clicked Privacy Policy');
+                        }),
+                  TextSpan(
+                    text: ' and ',
+                  ),
+                  TextSpan(
+                      text: 'Guidelines',
+                      style: kAgreementTextStyle.copyWith(
+                        decoration: TextDecoration.underline,
+                        color: Color(0xFF5F71E5),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          print('clicked GuideLines');
+                        }),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      Align(
+        alignment: Alignment.topCenter,
+        child: Image.asset(
+          'assets/images/crocodile_2.png',
+        ),
+      ),
+    ];
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 1230),
+      duration: const Duration(milliseconds: 1100),
       decoration: kRoundedTopBoxDecoration,
       height: uiConsumer.startChatButtonState ? 640 : 320,
       child: ListView(
@@ -89,107 +212,20 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                     text: 'Start a chat',
                     onPressed: uiConsumer.toggleStartChatButton,
                   )
-                : ButtonFilled(
-                    text: 'Accept & continue',
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        ChatScreen.id,
-                      );
-                    },
+                : AnimatedOpacity(
+                    duration: const Duration(milliseconds: 220),
+                    opacity: (uiConsumer.isAgreed && uiConsumer.is18OrOlder)
+                        ? 1
+                        : 0.5,
+                    child: ButtonFilled(
+                      text: 'Accept & continue',
+                      onPressed: () {
+
+                        registerGuest();
+                      },
+                    ),
                   ),
           ]),
     );
   }
-
-  // These widgets are added to the bottom sheet when the user clicks on the start chat button
-  List<Widget> adddedWidgets = [
-    Row(
-      children: [
-        Transform.scale(
-          scale: 1.2,
-          child: CustomCheckbox(
-            onChanged: (bool isChecked) {
-              print(isChecked);
-            },
-          ),
-        ),
-        SizedBox(width: 5),
-        Text(
-          'I am 18 or older',
-          style: kAgreementTextStyle.copyWith(height: 0),
-        ),
-      ],
-    ),
-    Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Transform.scale(
-          scale: 1.2,
-          child: CustomCheckbox(
-            onChanged: (bool isChecked) {},
-          ),
-        ),
-        SizedBox(width: 5),
-        Flexible(
-          child: RichText(
-            // 'By checking the box you agree to our terms and conditions,privacy policy and Guidelines',
-            // style: kAgreementTextStyle,
-            softWrap: true,
-            text: TextSpan(
-              text: 'By checking the box you agree to our ',
-              style: kAgreementTextStyle,
-              children: <TextSpan>[
-                TextSpan(
-                    text: 'terms and conditions,',
-                    style: kAgreementTextStyle.copyWith(
-                      decoration: TextDecoration.underline,
-                      color: Color(0xFF5F71E5),
-                      fontWeight: FontWeight.w400,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        print('clicked Terms and Conditions');
-                      }),
-                TextSpan(
-                  text: ' ',
-                ),
-                TextSpan(
-                    text: 'privacy policy',
-                    style: kAgreementTextStyle.copyWith(
-                      decoration: TextDecoration.underline,
-                      color: Color(0xFF5F71E5),
-                      fontWeight: FontWeight.w400,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        print('clicked Privacy Policy');
-                      }),
-                TextSpan(
-                  text: ' and ',
-                ),
-                TextSpan(
-                    text: 'Guidelines',
-                    style: kAgreementTextStyle.copyWith(
-                      decoration: TextDecoration.underline,
-                      color: Color(0xFF5F71E5),
-                      fontWeight: FontWeight.w400,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        print('clicked GuideLines');
-                      }),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-    Align(
-      alignment: Alignment.topCenter,
-      child: Image.asset(
-        'assets/images/crocodile_2.png',
-      ),
-    ),
-  ];
 }

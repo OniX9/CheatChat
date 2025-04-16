@@ -12,6 +12,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  bool onBoarded = false;
   late AnimationController controller;
 
   void startBouncingAnimation() {
@@ -37,13 +38,24 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
+  Future<void> checkHasOnBoarded() async {
+    onBoarded = await SharedPref().hasOnBoarded();
+  }
+
   void nextScreen() async {
     Future.delayed(const Duration(milliseconds: 6000), () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(
-          context,
-          OnBoardingScreen.id,
-        );
+        if (onBoarded) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            ChatScreen.id,
+            (route) => false,
+          );
+        } else {
+          Navigator.pushReplacementNamed(
+            context,
+            OnBoardingScreen.id,
+          );
+        }
       });
     });
   }
@@ -51,6 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+    checkHasOnBoarded();
     startBouncingAnimation();
     nextScreen();
   }
