@@ -45,7 +45,8 @@ class _SplashScreenState extends State<SplashScreen>
   void nextScreen() async {
     Future.delayed(const Duration(milliseconds: 6000), () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (onBoarded) {
+        // if (onBoarded) {
+        if (false) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             ChatScreen.id,
             (route) => false,

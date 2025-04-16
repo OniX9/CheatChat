@@ -1,4 +1,5 @@
 # CheatChat
+![CheatChat](assets/screenshots/cheatchat.png)
 
 CheatChat is a Flutter-based mobile application that allows users to chat anonymously with random people from around the world. Make friends, have fun, and connect with others in a safe and engaging environment.
 
@@ -9,9 +10,8 @@ CheatChat is a Flutter-based mobile application that allows users to chat anonym
 - **User-Friendly Interface**: Simple and intuitive design for seamless interaction.
 - **Age Restriction**: Must be 18 or older to use the app.
 
-## Screenshots
+## User Interface
 
-![CheatChat](assets/screenshots/cheatchat.png)
 ![OnBoarding](assets/screenshots/onboarding.png)
 ![Chat Screen](assets/screenshots/chat.png)
 
