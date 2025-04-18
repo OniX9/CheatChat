@@ -16,8 +16,7 @@ class ApiService {
   // final GoogleSignIn _googleSignIn = GoogleSignIn();
   http_dio.Dio dio = http_dio.Dio();
 
-  // static const API = 'https://cheatchat-api.onrender.com/v1';
-
+  // static const API = 'https://cheatchat-backend.onrender.com/v1';
   static const API = 'http://10.0.2.2:5009/v1'; //LocalHost
 
   void initialise() {
@@ -133,11 +132,13 @@ class ApiService {
   }
 
   Future<Map<String, dynamic>?> createGuest(BuildContext context) async {
+    var response = await dio.post(
+      '$API/guest-register',
+    );
+    print("Guest user: ${response.data}");
+    return response.data;
     try {
-      var response = await dio.post(
-        '$API/guest-register',
-      );
-      return response.data;
+
     } catch (e) {
       // ERROR HANDLING
       handleError(context, e, abortCodes: [409, 400]);
@@ -150,6 +151,46 @@ class ApiService {
     initiateDio(token);
     try {
       var response = await dio.get('$API/user');
+      return response.data;
+    } catch (e) {
+      // ERROR HANDLING
+      handleError(context, e, abortCodes: [404]);
+      return null;
+    }
+  }
+
+
+  Future<Map<String, dynamic>?> startChatroom(BuildContext context,
+      {required String? token}) async {
+    initiateDio(token);
+    try {
+      var response = await dio.post('$API/chatroom');
+      return response.data;
+    } catch (e) {
+      // ERROR HANDLING
+      handleError(context, e, abortCodes: [404]);
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> endChatroom(BuildContext context,
+      {required String? token}) async {
+    initiateDio(token);
+    try {
+      var response = await dio.delete('$API/chatroom');
+      return response.data;
+    } catch (e) {
+      // ERROR HANDLING
+      handleError(context, e, abortCodes: [404]);
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getOtherUser(BuildContext context,
+      {required String? token}) async {
+    initiateDio(token);
+    try {
+      var response = await dio.get('$API/chat/other-user-details');
       return response.data;
     } catch (e) {
       // ERROR HANDLING

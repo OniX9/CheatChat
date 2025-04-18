@@ -48,3 +48,6 @@ macos/
 linux/
 web/
 windows/
+
+# Firebase Cred
+google-services.json

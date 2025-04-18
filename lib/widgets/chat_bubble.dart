@@ -19,23 +19,23 @@ class ChatBubble extends StatelessWidget {
         ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 350),
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            margin: EdgeInsets.symmetric(horizontal: 18, vertical: 8),
             decoration: BoxDecoration(
                 color: isMe ? Colors.blue[800] : Colors.white,
                 borderRadius: isMe
                     ? BorderRadius.only(
-                  topRight: Radius.circular(20),
-                  topLeft: Radius.circular(20),
-                  bottomLeft: Radius.circular(20),
+                  topRight: Radius.circular(18),
+                  topLeft: Radius.circular(18),
+                  bottomLeft: Radius.circular(18),
                 )
                     : BorderRadius.only(
-                  topRight: Radius.circular(20),
-                  topLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+                  topRight: Radius.circular(18),
+                  topLeft: Radius.circular(18),
+                  bottomRight: Radius.circular(18),
                 )),
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 18.0, horizontal: 20),
+              const EdgeInsets.symmetric(vertical: 12.0, horizontal: 18),
               child: Text(
                 text,
                 style: TextStyle(

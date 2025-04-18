@@ -1,7 +1,8 @@
 import 'package:cheat_chat/imports/imports.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChatUIProvider()),
         ChangeNotifierProvider(create: (_) => OnBoardingUIProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => OtherUserProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

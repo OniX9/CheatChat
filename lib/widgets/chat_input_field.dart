@@ -1,11 +1,17 @@
 import 'package:cheat_chat/imports/imports.dart';
 
 class ChatInputField extends StatelessWidget {
-  const ChatInputField({Key? key}) : super(key: key);
+  final TextEditingController? controller;
+  final VoidCallback? onSendMessage;
+
+  const ChatInputField({
+    Key? key,
+    this.controller,
+    this.onSendMessage,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ChatUIProvider consumer = Provider.of(context);
     return Container(
       height: 80,
       decoration: kRoundedTopBoxDecoration,
@@ -14,16 +20,19 @@ class ChatInputField extends StatelessWidget {
           _LeftActionButton(),
           Expanded(
             child: TextField(
+              controller: controller,
               style: TextStyle(fontSize: 14),
-              onSubmitted: (String newMessage) {
-                consumer.addChatBubble(
-                  messageText: newMessage,
-                  isMe: true,
-                );
-              },
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
+              autofocus: true,
+              maxLines: null,
               decoration: InputDecoration(
                 hintText: 'Type message here...',
                 hintStyle: TextStyle(color: Colors.grey[400]),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 5,
+                  horizontal: 20,
+                ),
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -31,6 +40,13 @@ class ChatInputField extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          IconButton(
+            color: kAppBlue,
+            icon: const Icon(Icons.send, size: 30),
+            padding: const EdgeInsets.all(10),
+            // shape: const CircleBorder(),
+            onPressed: onSendMessage,
           ),
         ],
       ),
@@ -43,23 +59,25 @@ class _LeftActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ChatUIProvider consumer = Provider.of<ChatUIProvider>(context);
+    ChatUIProvider uiConsumer = Provider.of<ChatUIProvider>(context);
+    UserProvider userConsumer = Provider.of<UserProvider>(context);
+    OtherUserProvider otherUserConsumer = Provider.of<OtherUserProvider>(context);
 
     Widget chatButtonContent() {
-      var chatActionButtonType = consumer.chatActionButtonType;
+      var chatActionButtonType = uiConsumer.chatButtonType;
       late String label;
       late Color? buttonColor;
 
       switch (chatActionButtonType) {
-        case ChatActionStateTypes.endChat:
+        case ChatButtonTypes.endChat:
           label = 'End chat?';
           buttonColor = Colors.red;
           break;
-        case ChatActionStateTypes.youSure:
+        case ChatButtonTypes.youSure:
           label = 'You sure?';
           buttonColor = Colors.red;
           break;
-        case ChatActionStateTypes.newChat:
+        case ChatButtonTypes.newChat:
           label = 'New chat';
           buttonColor = Colors.blue[900];
           break;
@@ -74,27 +92,61 @@ class _LeftActionButton extends StatelessWidget {
         ),
         child: Align(
           alignment: Alignment.center,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 40),
-              child: Text(
-                label,
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
-            ),
-          ),
+          child: userConsumer.isChatRoomLoading || otherUserConsumer.isLoading
+              ? LoadingScreen()
+              : Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: 40),
+                    child: Text(
+                      label,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                  ),
+                ),
         ),
       );
     }
 
     return GestureDetector(
       onTap: () {
-        consumer.updateStartChatButtonState();
-        print(consumer.chatActionButtonType);
+        startOrEndChat(context);
       },
       child: chatButtonContent(),
     );
+  }
+
+  startOrEndChat(BuildContext context) {
+    ChatUIProvider uiConsumer =
+        Provider.of<ChatUIProvider>(context, listen: false);
+    UserProvider dataConsumer =
+        Provider.of<UserProvider>(context, listen: false);
+    OtherUserProvider otherUserConsumer =
+        Provider.of<OtherUserProvider>(context, listen: false);
+    UserProvider userConsumer =
+        Provider.of<UserProvider>(context, listen: false);
+    var user = userConsumer.getUser;
+
+    print("information");
+    if (dataConsumer.isChatRoomLoading) return;
+    if (uiConsumer.chatButtonType == ChatButtonTypes.newChat) {
+      dataConsumer.startChatRoom(context).then((result) async {
+        if (result != null) {
+          debugPrint("Start chat");
+          await otherUserConsumer.apiGetUser(context, token: user?.token);
+          uiConsumer.toogleChatButton();
+        }
+      });
+    } else if (uiConsumer.chatButtonType == ChatButtonTypes.endChat) {
+      uiConsumer.toogleChatButton();
+    } else if (uiConsumer.chatButtonType == ChatButtonTypes.youSure) {
+      dataConsumer.endChatRoom(context).then((result) {
+        if (result != null) {
+          debugPrint("End chat");
+          uiConsumer.toogleChatButton();
+        }
+      });
+    }
   }
 }

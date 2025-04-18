@@ -1,4 +1,6 @@
 import 'package:cheat_chat/imports/imports.dart';
+import 'package:cheat_chat/widgets/profile_avatar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String id = '/ChatScreen';
@@ -10,48 +12,57 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   @override
+  void initState() {
+    var user = Provider.of<UserProvider>(context, listen: false).getUser;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (user != null) {
+        Provider.of<OtherUserProvider>(context, listen: false)
+            .apiGetUser(context, token: user.token);
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var consumer = Provider.of<ChatUIProvider>(context);
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        return true;
-      },
-      child: Scaffold(
-          extendBodyBehindAppBar: true,
-          body: Container(
-            decoration: kLinearGradient,
-            child: SafeArea(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        padding: const EdgeInsets.only(top: 8, left: 12),
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            OnBoardingScreen.id,
-                          );
-                        },
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 27,
-                        ),
+    var otherUserConsumer = Provider.of<OtherUserProvider>(context);
+    var otherUser = otherUserConsumer.getUser;
+    return Scaffold(
+        extendBodyBehindAppBar: true,
+        body: Container(
+          decoration: kLinearGradient,
+          child: SafeArea(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      padding: const EdgeInsets.only(top: 8, left: 12),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        print("ProfileURL: ${otherUser?.profileUrl}");
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 27,
                       ),
-                      LogoImage(),
-                      SizedBox(width: 50),
-                    ],
-                  ),
-                  ProfileBox(userName: "userName"),
-                  ChatWindow(),
-                ],
-              ),
+                    ),
+                    LogoImage(),
+                    SizedBox(width: 50),
+                  ],
+                ),
+                ProfileBox(
+                  userName: otherUser?.name ?? "",
+                  imageUrl: otherUser?.profileUrl,
+                ),
+                ChatWindow(),
+                // ChatInputField(),
+              ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 }
 
@@ -59,9 +70,11 @@ class _ChatScreenState extends State<ChatScreen> {
 // 1.
 class ProfileBox extends StatelessWidget {
   final String userName;
+  final String? imageUrl;
 
   const ProfileBox({
     required this.userName,
+    required this.imageUrl,
     super.key,
   });
 
@@ -79,7 +92,7 @@ class ProfileBox extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ProfileAvatar(true),
+          ProfileAvatar(isOnline: true, imageUrl: imageUrl),
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,
@@ -102,9 +115,7 @@ class ProfileBox extends StatelessWidget {
           ),
           AnimatedOpacity(
             opacity:
-                consumer.chatActionButtonType == ChatActionStateTypes.newChat
-                    ? 1.0
-                    : 0,
+                consumer.chatButtonType == ChatButtonTypes.newChat ? 1.0 : 0,
             duration: const Duration(milliseconds: 300),
             child: Container(
               width: 70,
@@ -136,55 +147,6 @@ class ProfileBox extends StatelessWidget {
   }
 }
 
-// 2.
-class ProfileAvatar extends StatelessWidget {
-  final bool isOnline;
-  final String imageUri;
-
-  const ProfileAvatar(this.isOnline, {this.imageUri = '', super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 60,
-      height: 60,
-      margin: const EdgeInsets.symmetric(horizontal: 17),
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          ProfileContainer(
-            url: null,
-            radius: 53,
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Visibility(
-              visible: isOnline,
-              child: Container(
-                //Online Status green dot
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                padding: EdgeInsets.all(4),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.cyan[600],
-                    shape: BoxShape.circle,
-                  ),
-                  width: 12,
-                  height: 12,
-                  child: null,
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
 // 3.
 class ChatWindow extends StatefulWidget {
   const ChatWindow({Key? key}) : super(key: key);
@@ -194,9 +156,52 @@ class ChatWindow extends StatefulWidget {
 }
 
 class _ChatWindowState extends State<ChatWindow> {
+  UserModel? user;
+  Stream<QuerySnapshot>? _stream;
+  late StreamSubscription<QuerySnapshot> _subscription;
+  final firestore = FirebaseFirestore.instance;
+
+  static const short = ShortUuid();
+  final apiService = ApiService();
+  final utils = Utilities();
+  final messageTextController = TextEditingController();
+
+  initFSStream() {
+    var authUserConsumer = Provider.of<UserProvider>(context, listen: false);
+    var authUser = authUserConsumer.getUser;
+    String? chatroom_id = authUser?.chatRoom;
+
+    if (chatroom_id != null) {
+      _stream = firestore
+          .collection("chatrooms/${chatroom_id}/chats")
+          .orderBy("sent_on", descending: true)
+          .snapshots();
+
+      _subscription = _stream!.listen((snapshot) {
+        setState(() {
+          // No need to assign the stream again, it's already stored.
+        });
+      });
+    }
+  }
+
+  @override
+  initState() {
+    initFSStream();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    ChatUIProvider consumer = Provider.of(context);
+    var userConsumer = Provider.of<UserProvider>(context);
+    user = userConsumer.getUser;
+
     return Expanded(
       child: Container(
         decoration: kRoundedTopBoxDecoration.copyWith(
@@ -207,22 +212,67 @@ class _ChatWindowState extends State<ChatWindow> {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 80.0),
-              child: ListView(
-                reverse: true,
-                physics: BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
-                children: consumer.chatWidgets.reversed.toList(),
-              ),
+              child: user?.chatRoom != null
+                  ? StreamBuilder<QuerySnapshot>(
+                      stream: _stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: LoadingScreen(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              'Error: ${snapshot.error}',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.docs.isEmpty) {
+                          return Center(
+                            child: Text(
+                              '',
+                              // 'No chats',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: ListView.builder(
+                              reverse: true,
+                              itemCount: snapshot.data!.docs.length,
+                              physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics(),
+                              ),
+                              itemBuilder: (context, index) {
+                                DocumentSnapshot doc =
+                                    snapshot.data!.docs[index];
+                                var msg = ChatModel.fromDocSnapshot(doc);
+                                bool isMe = user?.uid == msg.uid;
+
+                                return ChatBubble(
+                                  text: msg.text ?? '',
+                                  isMe: isMe,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                    )
+                  : Center(
+                      child: Text(""),
+                    ),
             ),
             Visibility(
               // when text input onChanged is triggered on the
               // other parties TextField, visiblity should be true.
-              visible: true,
+              visible: false,
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 padding:
-                const EdgeInsets.symmetric(horizontal: 13.0, vertical: 6),
+                    const EdgeInsets.symmetric(horizontal: 13.0, vertical: 6),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -245,11 +295,57 @@ class _ChatWindowState extends State<ChatWindow> {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: ChatInputField(),
+              child: ChatInputField(
+                controller: messageTextController,
+                onSendMessage: () {
+                  sendMessage();
+                },
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  sendMessage() {
+    final chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
+    final authUserProvider = Provider.of<UserProvider>(context, listen: false);
+    var authUser = authUserProvider.getUser;
+
+    String? uid = authUser?.uid;
+    String? chatroom_id = authUser?.chatRoom;
+    String messageText = messageTextController.text;
+
+    // CHECKS
+    // 1. Chat already ended
+    print("Shouldn't send1");
+    if (authUser?.searching == true) {
+      print("Shouldn't send2");
+      utils.displayToastMessage(
+        context,
+        'Chat ended, tap "New Chat"',
+        position: StyledToastPosition.right,
+        animation: StyledToastAnimation.slideFromBottom,
+        backgroundColor: kAppBlue.withBlue(100),
+        textColor: Colors.grey[200],
+      );
+      return;
+    }
+
+    if (uid != null && messageText.isNotEmpty) {
+      String id = short.generate();
+      final userCollection =
+          firestore.collection("chatrooms/${chatroom_id}/chats");
+
+      ChatModel chat = ChatModel(
+        id: id,
+        uid: uid,
+        text: messageText,
+        sentOn: FieldValue.serverTimestamp(),
+      );
+      userCollection.doc(id).set(chat.toJson());
+      messageTextController.clear();
+    }
   }
 }

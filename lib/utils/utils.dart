@@ -4,14 +4,16 @@ class Utilities {
   ToastFuture displayToastMessage(
       BuildContext context,
       String message, {
-        StyledToastPosition position = StyledToastPosition.bottom,
+        StyledToastPosition position = StyledToastPosition.top,
+        StyledToastAnimation animation = StyledToastAnimation.scale,
+        Color? textColor = Colors.white,
         Color? backgroundColor = const Color(0xBB424242),
         Duration? duration = const Duration(seconds: 3),
       }) {
     return showToast(
       message,
       context: context,
-      animation: StyledToastAnimation.scale,
+      animation: animation,
       reverseAnimation: StyledToastAnimation.fade,
       position: position,
       animDuration: const Duration(seconds: 1),
@@ -20,6 +22,11 @@ class Utilities {
       reverseCurve: Curves.linear,
       borderRadius: BorderRadius.circular(25),
       backgroundColor: backgroundColor,
+      textStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        color: textColor,
+      )
     );
   }
 

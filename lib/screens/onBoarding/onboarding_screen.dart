@@ -1,5 +1,4 @@
 import 'package:cheat_chat/imports/imports.dart';
-import 'package:cheat_chat/widgets/button_filled.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   static const String id = '/OnBoardingPage';
@@ -69,8 +68,9 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
 
       utils.showLoadingScreen(context);
       var newUser = await userConsumer.apiCreateUser(context);
+      var userWithChatroom = await userConsumer.startChatRoom(context);
 
-      if (newUser != null) {
+      if (newUser != null && userWithChatroom != null) {
         Navigator.pushNamedAndRemoveUntil(
           context,
           ChatScreen.id,
@@ -220,7 +220,6 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                     child: ButtonFilled(
                       text: 'Accept & continue',
                       onPressed: () {
-
                         registerGuest();
                       },
                     ),

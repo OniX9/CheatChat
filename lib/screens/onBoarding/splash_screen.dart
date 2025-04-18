@@ -15,6 +15,23 @@ class _SplashScreenState extends State<SplashScreen>
   bool onBoarded = false;
   late AnimationController controller;
 
+  loadUser() {
+    var userConsumer = Provider.of<UserProvider>(context, listen: false);
+    var chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
+    userConsumer.loadUserFromPreferences().then((_) {
+      var user = userConsumer.getUser;
+      if (user != null) {
+        // Set Chat button to NewChat, if user has already ended chat.
+        ChatButtonTypes chatButtonType = user.searching == true
+            ? ChatButtonTypes.newChat
+            : ChatButtonTypes.endChat;
+        chatUIConsumer.updateChatButtonType(chatButtonType);
+        // Fetch new user info
+        userConsumer.apiUpdateUser(context);
+      }
+    });
+  }
+
   void startBouncingAnimation() {
     controller = AnimationController(
       vsync: this,
@@ -45,8 +62,8 @@ class _SplashScreenState extends State<SplashScreen>
   void nextScreen() async {
     Future.delayed(const Duration(milliseconds: 6000), () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        // if (onBoarded) {
-        if (false) {
+        if (onBoarded) {
+          // if (false) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             ChatScreen.id,
             (route) => false,
@@ -65,6 +82,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     checkHasOnBoarded();
+    loadUser();
     startBouncingAnimation();
     nextScreen();
   }
