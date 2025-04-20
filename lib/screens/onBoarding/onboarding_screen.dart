@@ -76,7 +76,6 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           ChatScreen.id,
           (Route<dynamic> route) => false,
         );
-        FCMServices(context).initNotifications();
         setOnBoarded();
       }
     }

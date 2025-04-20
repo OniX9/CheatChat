@@ -60,9 +60,9 @@ class OtherUserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // 3. Update online status
+  // 3. Update typing status
   Timer? _isTypingTimer;
-  /// Refreshes online status(isOnline) countdown, based on last seen time
+  /// Refreshes typing status (isTyping) countdown, based on last typing time
   Future<void> refreshIsTyping({required DateTime lastTyping}) async {
     int maxOfflineDelay = 5;
 

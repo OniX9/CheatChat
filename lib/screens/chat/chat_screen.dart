@@ -18,9 +18,18 @@ class _ChatScreenState extends State<ChatScreen> {
       if (user != null) {
         Provider.of<OtherUserProvider>(context, listen: false)
             .apiGetUser(context, token: user.token);
+        Provider.of<ChatProvider>(context, listen: false)
+            .apiStartOnlinePolling(context, token: user.token);
+        FCMServices(context).initNotifications();
       }
     });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    Provider.of<ChatProvider>(context, listen: false).apiStopOnlinePolling();
+    super.dispose();
   }
 
   @override
@@ -93,7 +102,8 @@ class ProfileBox extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ProfileAvatar(isOnline: otherUserConsumer.isOnline, imageUrl: imageUrl),
+          ProfileAvatar(
+              isOnline: otherUserConsumer.isOnline, imageUrl: imageUrl),
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,
@@ -303,7 +313,7 @@ class _ChatWindowState extends State<ChatWindow> {
               child: ChatInputField(
                 controller: messageTextController,
                 onSendMessage: () {
-                   if (isOnline) sendMessage();
+                  if (isOnline) sendMessage();
                 },
               ),
             ),
