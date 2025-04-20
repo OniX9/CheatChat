@@ -13,7 +13,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
@@ -21,6 +20,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OnBoardingUIProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => OtherUserProvider()),
+        ChangeNotifierProvider(create: (_) => InternetCheckProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

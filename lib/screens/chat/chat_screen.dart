@@ -40,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     IconButton(
                       padding: const EdgeInsets.only(top: 8, left: 12),
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.of(context).pushNamed(OnBoardingScreen.id);
                         print("ProfileURL: ${otherUser?.profileUrl}");
                       },
                       icon: Icon(
@@ -81,6 +81,7 @@ class ProfileBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ChatUIProvider consumer = Provider.of<ChatUIProvider>(context);
+    var otherUserConsumer = Provider.of<OtherUserProvider>(context);
 
     return Container(
       height: 80,
@@ -92,7 +93,7 @@ class ProfileBox extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ProfileAvatar(isOnline: true, imageUrl: imageUrl),
+          ProfileAvatar(isOnline: otherUserConsumer.isOnline, imageUrl: imageUrl),
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,
@@ -188,11 +189,13 @@ class _ChatWindowState extends State<ChatWindow> {
   @override
   initState() {
     initFSStream();
+    Provider.of<InternetCheckProvider>(context, listen: false).init();
     super.initState();
   }
 
   @override
   void dispose() {
+    Provider.of<InternetCheckProvider>(context, listen: false).dispose();
     _subscription.cancel();
     super.dispose();
   }
@@ -201,6 +204,8 @@ class _ChatWindowState extends State<ChatWindow> {
   Widget build(BuildContext context) {
     var userConsumer = Provider.of<UserProvider>(context);
     user = userConsumer.getUser;
+    bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
+    var otherUserConsumer = Provider.of<OtherUserProvider>(context);
 
     return Expanded(
       child: Container(
@@ -268,7 +273,7 @@ class _ChatWindowState extends State<ChatWindow> {
             Visibility(
               // when text input onChanged is triggered on the
               // other parties TextField, visiblity should be true.
-              visible: false,
+              visible: otherUserConsumer.isTyping,
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 padding:
@@ -298,7 +303,7 @@ class _ChatWindowState extends State<ChatWindow> {
               child: ChatInputField(
                 controller: messageTextController,
                 onSendMessage: () {
-                  sendMessage();
+                   if (isOnline) sendMessage();
                 },
               ),
             ),

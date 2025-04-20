@@ -14,12 +14,16 @@ export 'package:firebase_core/firebase_core.dart';
 export 'package:path_provider/path_provider.dart';
 export 'package:permission_handler/permission_handler.dart';
 export 'package:shared_preferences/shared_preferences.dart';
+export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:flutter_styled_toast/flutter_styled_toast.dart';
+export 'package:internet_connection_checker/internet_connection_checker.dart';
+export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 //------------------------DataProviders-----------------------------------------
 export 'package:cheat_chat/providers/ui/chat_ui_provider.dart';
 export 'package:cheat_chat/providers/data/user_provider.dart';
+export 'package:cheat_chat/providers/data/internet_check_provider.dart';
 
 //------------------------UIProviders-------------------------------------------
 export 'package:cheat_chat/providers/ui/onboarding_ui_provider.dart';
@@ -58,4 +62,6 @@ export 'package:cheat_chat/providers/data/other_user_provider.dart';
 //------------------------SERVICES----------------------------------------------
 export 'package:cheat_chat/services/shared_pref.dart';
 export 'package:cheat_chat/services/api_services.dart';
+export 'package:cheat_chat/services/fcm_services.dart';
+
 

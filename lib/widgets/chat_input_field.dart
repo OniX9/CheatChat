@@ -62,6 +62,8 @@ class _LeftActionButton extends StatelessWidget {
     ChatUIProvider uiConsumer = Provider.of<ChatUIProvider>(context);
     UserProvider userConsumer = Provider.of<UserProvider>(context);
     OtherUserProvider otherUserConsumer = Provider.of<OtherUserProvider>(context);
+    bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
+
 
     Widget chatButtonContent() {
       var chatActionButtonType = uiConsumer.chatButtonType;
@@ -111,7 +113,9 @@ class _LeftActionButton extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        startOrEndChat(context);
+        if (isOnline) {
+          startOrEndChat(context);
+        }
       },
       child: chatButtonContent(),
     );

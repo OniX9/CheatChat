@@ -76,7 +76,6 @@ class ApiService {
         adminUserProvider.clearAll();
         Navigator.of(context).pushReplacement(
           PageTransition(
-            // const SignUpOptions(),
             const OnBoardingScreen(),
             slideFrom: SlideFrom.left,
           ),
@@ -131,14 +130,15 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>?> createGuest(BuildContext context) async {
-    var response = await dio.post(
-      '$API/guest-register',
-    );
-    print("Guest user: ${response.data}");
-    return response.data;
-    try {
+  // ***USER***
 
+  Future<Map<String, dynamic>?> createGuest(BuildContext context) async {
+    try {
+      var response = await dio.post(
+        '$API/guest-register',
+      );
+      print("Guest user: ${response.data}");
+      return response.data;
     } catch (e) {
       // ERROR HANDLING
       handleError(context, e, abortCodes: [409, 400]);
@@ -159,6 +159,7 @@ class ApiService {
     }
   }
 
+  // ***CHATROOM***
 
   Future<Map<String, dynamic>?> startChatroom(BuildContext context,
       {required String? token}) async {
@@ -186,6 +187,28 @@ class ApiService {
     }
   }
 
+  Future uploadFCMToken(BuildContext context,
+      {required String? token, required String fcmToken}) async {
+    initiateDio(token);
+    Map<String, dynamic> data = {
+      "fcm_token": fcmToken,
+    };
+
+    try {
+      var response = await dio.put(
+        '$API/user/fcm-token',
+        data: data,
+      );
+      return response.data;
+    } catch (e) {
+      // ERROR HANDLING
+      handleError(context, e);
+      return null;
+    }
+  }
+
+  // ***CHAT***
+
   Future<Map<String, dynamic>?> getOtherUser(BuildContext context,
       {required String? token}) async {
     initiateDio(token);
@@ -198,4 +221,31 @@ class ApiService {
       return null;
     }
   }
+
+  Future<Map<String, dynamic>?> refreshOnlineStatus(BuildContext context,
+      {required String? token}) async {
+    initiateDio(token);
+    try {
+      var response = await dio.get('$API/chat/last-online');
+      return response.data;
+    } catch (e) {
+      // ERROR HANDLING
+      handleError(context, e);
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>?> refreshTypingStatus(BuildContext context,
+      {required String? token}) async {
+    initiateDio(token);
+    try {
+      var response = await dio.get('$API/chat/last-typing');
+      return response.data;
+    } catch (e) {
+      // ERROR HANDLING
+      handleError(context, e);
+      return null;
+    }
+  }
+
 }

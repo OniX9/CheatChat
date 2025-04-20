@@ -15,23 +15,6 @@ class _SplashScreenState extends State<SplashScreen>
   bool onBoarded = false;
   late AnimationController controller;
 
-  loadUser() {
-    var userConsumer = Provider.of<UserProvider>(context, listen: false);
-    var chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
-    userConsumer.loadUserFromPreferences().then((_) {
-      var user = userConsumer.getUser;
-      if (user != null) {
-        // Set Chat button to NewChat, if user has already ended chat.
-        ChatButtonTypes chatButtonType = user.searching == true
-            ? ChatButtonTypes.newChat
-            : ChatButtonTypes.endChat;
-        chatUIConsumer.updateChatButtonType(chatButtonType);
-        // Fetch new user info
-        userConsumer.apiUpdateUser(context);
-      }
-    });
-  }
-
   void startBouncingAnimation() {
     controller = AnimationController(
       vsync: this,
@@ -78,13 +61,33 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
+  loadUser() {
+    var userConsumer = Provider.of<UserProvider>(context, listen: false);
+    var chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
+    userConsumer.loadUserFromPreferences().then((_) {
+      var user = userConsumer.getUser;
+      if (user != null) {
+        // Set Chat button to NewChat, if user has already ended chat.
+        // userConsumer.isChatRoomLoading
+        ChatButtonTypes chatButtonType = user.searching == true
+            ? ChatButtonTypes.newChat
+            : ChatButtonTypes.endChat;
+        chatUIConsumer.updateChatButtonType(chatButtonType);
+        // Fetch new user info
+        userConsumer.apiUpdateUser(context);
+        // Update FCMToken
+        FCMServices(context).initNotifications();
+      }
+    });
+  }
+
   @override
   void initState() {
-    super.initState();
     checkHasOnBoarded();
-    loadUser();
     startBouncingAnimation();
+    loadUser();
     nextScreen();
+    super.initState();
   }
 
   @override

@@ -8,7 +8,7 @@ class UserProvider with ChangeNotifier {
   UserModel? _user;
 
   UserModel? get getUser => _user;
-   bool get isChatRoomLoading => _isChatRoomLoading;
+  bool get isChatRoomLoading => _isChatRoomLoading;
 
   Future<void> loadUserFromPreferences() async {
     Map<String, dynamic>? userData = await sharedPref.getUser();
@@ -34,7 +34,7 @@ class UserProvider with ChangeNotifier {
 
   // API ViewModels Methods
   // 1. Create a guest user
-  Future<UserModel?>apiCreateUser(BuildContext context) async {
+  Future<UserModel?> apiCreateUser(BuildContext context) async {
     UserModel? formattedResult;
 
     var newUser = await apiServices.createGuest(context);
@@ -48,7 +48,6 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     return formattedResult;
   }
-
 
   // 2. Update user data
   Future<UserModel?> apiUpdateUser(BuildContext context) async {
@@ -102,4 +101,5 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     return formattedResult;
   }
+
 }
