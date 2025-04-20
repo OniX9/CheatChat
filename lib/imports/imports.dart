@@ -18,6 +18,7 @@ export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:cheat_chat/providers/data/chat_provider.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:flutter_styled_toast/flutter_styled_toast.dart';
+export 'package:loading_animation_widget/loading_animation_widget.dart';
 export 'package:internet_connection_checker/internet_connection_checker.dart';
 export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

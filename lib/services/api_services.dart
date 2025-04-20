@@ -16,8 +16,8 @@ class ApiService {
   // final GoogleSignIn _googleSignIn = GoogleSignIn();
   http_dio.Dio dio = http_dio.Dio();
 
-  // static const API = 'https://cheatchat-backend.onrender.com/v1';
-  static const API = 'http://10.0.2.2:5009/v1'; //LocalHost
+  static const API = 'https://cheatchat-backend.onrender.com/v1';
+  // static const API = 'http://10.0.2.2:5009/v1'; //LocalHost
 
   void initialise() {
     var options = BaseOptions(

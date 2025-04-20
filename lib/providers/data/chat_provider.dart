@@ -34,7 +34,7 @@ class ChatProvider with ChangeNotifier {
       return;
     }
 
-    _onlineStatusTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+    _onlineStatusTimer = Timer.periodic(const Duration(milliseconds: 5600), (timer) async {
       await apiServices.refreshOnlineStatus(context, token: token);
     });
   }

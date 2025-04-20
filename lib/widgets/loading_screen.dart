@@ -1,13 +1,15 @@
 import 'package:cheat_chat/imports/imports.dart';
 
 class LoadingScreen extends StatelessWidget {
-  const LoadingScreen({super.key});
+  final Color color;
+  const LoadingScreen({super.key, this.color = kAppGreenMain});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: kAppGreenMain,
+    return Center(
+      child: LoadingAnimationWidget.staggeredDotsWave(
+        color: color,
+        size: 30,
       ),
     );
   }

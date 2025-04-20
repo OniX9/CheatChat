@@ -57,12 +57,11 @@ class FCMServices {
       userProvider.apiUpdateUser(context);
     }
     // 2. Update Other User Details
-    // bool updateLastTyping = pushData['last_typing'] != null;
-    //
-    // if (user?.token != null && updateLastTyping) {
-    //   DateTime.parse(pushData['last_typing']);
-    //   userProvider.updateOnlineStatus(context, lastOnline: DateTime.parse(pushData['last_typing']));
-    // }
+    bool updateOtherUser = pushData['update_other_user'] == 'true';
+    if (user?.token != null && updateOtherUser) {
+      otherUserProvider.apiGetUser(context, token: user?.token);
+      print("Update other user Passed");
+    }
     // 3. Is Other User Typing
     bool LastTypingString = pushData['last_typing'] != null;
 

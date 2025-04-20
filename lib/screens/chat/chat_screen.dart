@@ -36,6 +36,14 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     var otherUserConsumer = Provider.of<OtherUserProvider>(context);
     var otherUser = otherUserConsumer.getUser;
+    var userConsumer = Provider.of<UserProvider>(context, listen: false);
+    var user = userConsumer.getUser;
+    bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
+    // Update other user once user isOnline, & if is not updated before.
+    if (isOnline && otherUserConsumer.getUser == null){
+      otherUserConsumer.apiGetUser(context, token:user?.token);
+    }
+
     return Scaffold(
         extendBodyBehindAppBar: true,
         body: Container(
@@ -49,8 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     IconButton(
                       padding: const EdgeInsets.only(top: 8, left: 12),
                       onPressed: () {
-                        Navigator.of(context).pushNamed(OnBoardingScreen.id);
-                        print("ProfileURL: ${otherUser?.profileUrl}");
+                        Navigator.of(context).pop();
                       },
                       icon: Icon(
                         Icons.arrow_back,
@@ -63,6 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
                 ProfileBox(
+                  isOnline: isOnline,
                   userName: otherUser?.name ?? "",
                   imageUrl: otherUser?.profileUrl,
                 ),
@@ -78,10 +86,12 @@ class _ChatScreenState extends State<ChatScreen> {
 //***SCREEN-ONLY WIDGETs***
 // 1.
 class ProfileBox extends StatelessWidget {
+  final bool isOnline;
   final String userName;
   final String? imageUrl;
 
   const ProfileBox({
+    required this.isOnline,
     required this.userName,
     required this.imageUrl,
     super.key,
@@ -90,7 +100,6 @@ class ProfileBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ChatUIProvider consumer = Provider.of<ChatUIProvider>(context);
-    var otherUserConsumer = Provider.of<OtherUserProvider>(context);
 
     return Container(
       height: 80,
@@ -103,7 +112,7 @@ class ProfileBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ProfileAvatar(
-              isOnline: otherUserConsumer.isOnline, imageUrl: imageUrl),
+              isOnline: isOnline, imageUrl: imageUrl),
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,

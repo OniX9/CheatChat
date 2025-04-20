@@ -66,11 +66,11 @@ class _LeftActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final utils = Utilities();
     ChatUIProvider uiConsumer = Provider.of<ChatUIProvider>(context);
     UserProvider userConsumer = Provider.of<UserProvider>(context);
     OtherUserProvider otherUserConsumer = Provider.of<OtherUserProvider>(context);
     bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
-
 
     Widget chatButtonContent() {
       var chatActionButtonType = uiConsumer.chatButtonType;
@@ -102,7 +102,7 @@ class _LeftActionButton extends StatelessWidget {
         child: Align(
           alignment: Alignment.center,
           child: userConsumer.isChatRoomLoading || otherUserConsumer.isLoading
-              ? LoadingScreen()
+              ? const LoadingScreen(color: Colors.white)
               : Padding(
                   padding: const EdgeInsets.only(left: 4),
                   child: ConstrainedBox(
@@ -122,6 +122,8 @@ class _LeftActionButton extends StatelessWidget {
       onTap: () {
         if (isOnline) {
           startOrEndChat(context);
+        } else {
+          utils.displayToastMessage(context, "Check your internet connection");
         }
       },
       child: chatButtonContent(),
