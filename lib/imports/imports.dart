@@ -15,6 +15,7 @@ export 'package:path_provider/path_provider.dart';
 export 'package:permission_handler/permission_handler.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
+export 'package:cheat_chat/providers/data/chat_provider.dart';
 export 'package:cached_network_image/cached_network_image.dart';
 export 'package:flutter_styled_toast/flutter_styled_toast.dart';
 export 'package:internet_connection_checker/internet_connection_checker.dart';

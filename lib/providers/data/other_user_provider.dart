@@ -64,7 +64,7 @@ class OtherUserProvider with ChangeNotifier {
   Timer? _isTypingTimer;
   /// Refreshes online status(isOnline) countdown, based on last seen time
   Future<void> refreshIsTyping({required DateTime lastTyping}) async {
-    int maxOfflineDelay = 4;
+    int maxOfflineDelay = 5;
 
     int seconds_diff = DateTime.now().difference(lastTyping).inSeconds;
     // If seconds is negative, return 0.

@@ -12,6 +12,10 @@ class ChatInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ChatProvider chatConsumer = Provider.of<ChatProvider>(context);
+    var userConsumer = Provider.of<UserProvider>(context);
+    var user = userConsumer.getUser;
+
     return Container(
       height: 80,
       decoration: kRoundedTopBoxDecoration,
@@ -26,6 +30,9 @@ class ChatInputField extends StatelessWidget {
               textInputAction: TextInputAction.newline,
               autofocus: true,
               maxLines: null,
+              onChanged: (_){
+                chatConsumer.apiRefreshTypingStatus(context, token: user?.token);
+              },
               decoration: InputDecoration(
                 hintText: 'Type message here...',
                 hintStyle: TextStyle(color: Colors.grey[400]),
