@@ -1,32 +1,27 @@
 import 'package:cheat_chat/imports/imports.dart';
 
 class ServerChatHint extends StatelessWidget {
-  String chatHint;
+  final String chatHint;
 
-  ServerChatHint({
+  const ServerChatHint({
     required this.chatHint,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          // Computers chat Question hints
-          padding: EdgeInsets.symmetric(
-            horizontal: 50,
-            vertical: 15,
-          ),
-          child: Text(
-            chatHint,
-            textAlign: TextAlign.center,
-            style: kDescriptionTextStyle.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+    return Padding(
+      // Computers chat Question hints
+      padding: const EdgeInsets.fromLTRB(50, 30, 50, 10),
+      child: Text(
+        chatHint,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: 14,
+          color: Color(0xFF9CA6AE),
         ),
-      ],
+      ),
     );
   }
 }

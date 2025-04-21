@@ -294,11 +294,14 @@ class _ChatWindowState extends State<ChatWindow> {
                                     snapshot.data!.docs[index];
                                 var msg = ChatModel.fromDocSnapshot(doc);
                                 bool isMe = user?.uid == msg.uid;
+                                bool isServer = msg.uid == "server_mx000";
 
-                                return ChatBubble(
-                                  text: msg.text ?? '',
-                                  isMe: isMe,
-                                );
+                                return isServer
+                                    ? ServerChatHint(chatHint: msg.text ?? "")
+                                    : ChatBubble(
+                                        text: msg.text ?? '',
+                                        isMe: isMe,
+                                      );
                               },
                             ),
                           );
@@ -353,9 +356,10 @@ class _ChatWindowState extends State<ChatWindow> {
   }
 
   sendMessage() {
-    final chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
+    // final chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
     final authUserProvider = Provider.of<UserProvider>(context, listen: false);
     var authUser = authUserProvider.getUser;
+    final chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
 
     String? uid = authUser?.uid;
     String? chatroom_id = authUser?.chatRoom;
@@ -363,9 +367,7 @@ class _ChatWindowState extends State<ChatWindow> {
 
     // CHECKS
     // 1. Chat already ended
-    print("Shouldn't send1");
-    if (authUser?.searching == true) {
-      print("Shouldn't send2");
+    if (chatUIConsumer.chatButtonType == ChatButtonTypes.newChat) {
       utils.displayToastMessage(
         context,
         'Chat ended, tap "New Chat"',

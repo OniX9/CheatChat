@@ -13,6 +13,7 @@ class ChatInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ChatProvider chatConsumer = Provider.of<ChatProvider>(context);
+    ChatUIProvider chatUIConsumer = Provider.of<ChatUIProvider>(context);
     var userConsumer = Provider.of<UserProvider>(context);
     var user = userConsumer.getUser;
 
@@ -30,8 +31,13 @@ class ChatInputField extends StatelessWidget {
               textInputAction: TextInputAction.newline,
               autofocus: true,
               maxLines: null,
-              onChanged: (_){
-                chatConsumer.apiRefreshTypingStatus(context, token: user?.token);
+              onChanged: (_) {
+                if (chatUIConsumer.chatButtonType != ChatButtonTypes.newChat) {
+                  chatConsumer.apiRefreshTypingStatus(
+                    context,
+                    token: user?.token,
+                  );
+                }
               },
               decoration: InputDecoration(
                 hintText: 'Type message here...',
@@ -69,7 +75,8 @@ class _LeftActionButton extends StatelessWidget {
     final utils = Utilities();
     ChatUIProvider uiConsumer = Provider.of<ChatUIProvider>(context);
     UserProvider userConsumer = Provider.of<UserProvider>(context);
-    OtherUserProvider otherUserConsumer = Provider.of<OtherUserProvider>(context);
+    OtherUserProvider otherUserConsumer =
+        Provider.of<OtherUserProvider>(context);
     bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
 
     Widget chatButtonContent() {

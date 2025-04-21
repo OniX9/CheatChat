@@ -22,8 +22,8 @@ class ApiService {
   void initialise() {
     var options = BaseOptions(
         baseUrl: API,
-        connectTimeout: Duration(milliseconds: 5000),
-        receiveTimeout: Duration(milliseconds: 3500),
+        connectTimeout: const Duration(milliseconds: 5000),
+        receiveTimeout: const Duration(milliseconds: 3500),
         followRedirects: false,
         validateStatus: (status) {
           return status! < 500;
