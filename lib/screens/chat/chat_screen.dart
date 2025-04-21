@@ -1,5 +1,4 @@
 import 'package:cheat_chat/imports/imports.dart';
-import 'package:cheat_chat/widgets/profile_avatar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -11,6 +10,7 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  ChatProvider? chatProvider;
   @override
   void initState() {
     var user = Provider.of<UserProvider>(context, listen: false).getUser;
@@ -18,8 +18,8 @@ class _ChatScreenState extends State<ChatScreen> {
       if (user != null) {
         Provider.of<OtherUserProvider>(context, listen: false)
             .apiGetUser(context, token: user.token);
-        Provider.of<ChatProvider>(context, listen: false)
-            .apiStartOnlinePolling(context, token: user.token);
+        chatProvider = Provider.of<ChatProvider>(context, listen: false);
+        chatProvider?.apiStartOnlinePolling(context, token: user.token);
         FCMServices(context).initNotifications();
       }
     });
@@ -28,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-    Provider.of<ChatProvider>(context, listen: false).apiStopOnlinePolling();
+    chatProvider?.apiStopOnlinePolling();
     super.dispose();
   }
 
@@ -40,9 +40,13 @@ class _ChatScreenState extends State<ChatScreen> {
     var user = userConsumer.getUser;
     bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
     // Update other user once user isOnline, & if is not updated before.
-    if (isOnline && otherUserConsumer.getUser == null){
-      otherUserConsumer.apiGetUser(context, token:user?.token);
-    }
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (isOnline && otherUserConsumer.getUser == null && mounted) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          otherUserConsumer.apiGetUser(context, token: user?.token);
+        });
+      }
+    });
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -54,19 +58,33 @@ class _ChatScreenState extends State<ChatScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
+                    Padding(
                       padding: const EdgeInsets.only(top: 8, left: 12),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 27,
+                      child: IconButton(
+                        onPressed: () {
+                          SystemNavigator.pop(animated: true);
+                        },
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 27,
+                        ),
                       ),
                     ),
                     LogoImage(),
-                    SizedBox(width: 50),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8, right: 12),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(ProfileScreen.id);
+                        },
+                        icon: Icon(
+                          Icons.menu,
+                          color: Colors.white,
+                          size: 27,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 ProfileBox(
@@ -111,8 +129,7 @@ class ProfileBox extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          ProfileAvatar(
-              isOnline: isOnline, imageUrl: imageUrl),
+          ProfileAvatar(isOnline: isOnline, imageUrl: imageUrl),
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,
@@ -180,6 +197,7 @@ class _ChatWindowState extends State<ChatWindow> {
   Stream<QuerySnapshot>? _stream;
   late StreamSubscription<QuerySnapshot> _subscription;
   final firestore = FirebaseFirestore.instance;
+  InternetCheckProvider? internetCheckProvider;
 
   static const short = ShortUuid();
   final apiService = ApiService();
@@ -208,13 +226,15 @@ class _ChatWindowState extends State<ChatWindow> {
   @override
   initState() {
     initFSStream();
-    Provider.of<InternetCheckProvider>(context, listen: false).init();
+    internetCheckProvider =
+        Provider.of<InternetCheckProvider>(context, listen: false);
+    internetCheckProvider?.init();
     super.initState();
   }
 
   @override
   void dispose() {
-    Provider.of<InternetCheckProvider>(context, listen: false).dispose();
+    internetCheckProvider?.dispose();
     _subscription.cancel();
     super.dispose();
   }

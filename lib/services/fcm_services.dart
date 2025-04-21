@@ -54,7 +54,7 @@ class FCMServices {
     // 1. UPDATE USER
     bool updateUser = pushData['user_update'] == 'true';
     if (user?.token != null && updateUser) {
-      userProvider.apiUpdateUser(context);
+      userProvider.apiGetUser(context);
     }
     // 2. Update Other User Details
     bool updateOtherUser = pushData['update_other_user'] == 'true';

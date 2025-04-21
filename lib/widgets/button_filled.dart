@@ -1,5 +1,4 @@
 import 'package:cheat_chat/imports/imports.dart';
-import 'package:cheat_chat/widgets/gradient_text.dart';
 
 class ButtonFilled extends StatelessWidget {
   final String text;

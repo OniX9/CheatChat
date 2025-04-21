@@ -33,7 +33,7 @@ class UserProvider with ChangeNotifier {
   }
 
   // API ViewModels Methods
-  // 1. Create a guest user
+  /// 1. Create a guest user
   Future<UserModel?> apiCreateUser(BuildContext context) async {
     UserModel? formattedResult;
 
@@ -49,8 +49,8 @@ class UserProvider with ChangeNotifier {
     return formattedResult;
   }
 
-  // 2. Update user data
-  Future<UserModel?> apiUpdateUser(BuildContext context) async {
+  /// 2. Get user data
+  Future<UserModel?> apiGetUser(BuildContext context) async {
     if (_user == null || _user?.token == null) return null;
     UserModel? formattedResult;
 
@@ -64,7 +64,28 @@ class UserProvider with ChangeNotifier {
     return formattedResult;
   }
 
-  // 3. Start a new chat room
+  /// 3. Update user profile
+  Future<UserModel?> apiUpdateUser(BuildContext context, {String? name, String? profilePicPath}) async {
+    if (_user == null || _user?.token == null) return null;
+    UserModel? formattedResult;
+
+    var newUser = await apiServices.updateProfile(
+      context,
+      token: _user?.token,
+      name: name,
+      profilePicPath: profilePicPath,
+    );
+
+    if (newUser != null) {
+      formattedResult = UserModel.fromJson(newUser);
+      _user = formattedResult;
+      await sharedPref.setUser(newUser);
+    }
+
+    return formattedResult;
+  }
+
+  /// 4. Start a new chat room
   Future<UserModel?> startChatRoom(BuildContext context) async {
     if (_user == null || _user?.token == null) return null;
     UserModel? formattedResult;
@@ -83,7 +104,7 @@ class UserProvider with ChangeNotifier {
     return formattedResult;
   }
 
-  // 4. End chat
+  /// 5. End chat
   Future<UserModel?> endChatRoom(BuildContext context) async {
     if (_user == null || _user?.token == null) return null;
     UserModel? formattedResult;

@@ -32,9 +32,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
           routes: {
-            SplashScreen.id : (context) => SplashScreen(),
-            OnBoardingScreen.id : (context) => OnBoardingScreen(),
-            ChatScreen.id : (context) => ChatScreen(),
+            SplashScreen.id : (context) => const SplashScreen(),
+            OnBoardingScreen.id : (context) => const OnBoardingScreen(),
+            ChatScreen.id : (context) => const ChatScreen(),
+            ProfileScreen.id : (context) => const ProfileScreen(),
           }
       ),
     );

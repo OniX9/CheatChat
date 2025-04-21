@@ -159,6 +159,38 @@ class ApiService {
     }
   }
 
+  Future updateProfile(
+      BuildContext context, {
+        required String? token,
+        String? name,
+        String? email,
+        String? phoneNo,
+        String? referredBy,
+        String? profilePicPath,
+      }) async {
+    initiateDio(token);
+
+    try {
+      FormData formData = FormData.fromMap({
+        'name': name,
+        if (profilePicPath != null)
+          'profile_pic': await MultipartFile.fromFile(profilePicPath),
+      });
+
+      var response = await dio.put(
+        '$API/user',
+        data: formData,
+      );
+
+      return response.data;
+    } catch (e) {
+      // ERROR HANDLING
+      handleError(context, e,
+          abortCodes: [404], errorMsgPosition: StyledToastPosition.top);
+      return null;
+    }
+  }
+
   // ***CHATROOM***
 
   Future<Map<String, dynamic>?> startChatroom(BuildContext context,

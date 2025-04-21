@@ -12,6 +12,7 @@ export 'package:short_uuids/short_uuids.dart';
 export 'package:cheat_chat/utils/variables.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:path_provider/path_provider.dart';
+export 'package:hl_image_picker/hl_image_picker.dart';
 export 'package:permission_handler/permission_handler.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
@@ -47,19 +48,22 @@ export 'package:cheat_chat/widgets/logo_image.dart';
 export 'package:cheat_chat/widgets/chat_input_field.dart';
 export 'package:cheat_chat/widgets/profile_container.dart';
 export 'package:cheat_chat/widgets/button_filled.dart';
+export 'package:cheat_chat/widgets/profile_avatar.dart';
+export 'package:cheat_chat/widgets/custom_textfield.dart';
+export 'package:cheat_chat/widgets/gradient_text.dart';
 
 //------------------------SCREENS-----------------------------------------------
 export 'package:cheat_chat/screens/onBoarding/splash_screen.dart';
 export 'package:cheat_chat/screens/onBoarding/onboarding_screen.dart';
 export 'package:cheat_chat/screens/chat/chat_screen.dart';
 export 'package:cheat_chat/widgets/loading_screen.dart';
+export 'package:cheat_chat/screens/profile/profile_screen.dart';
 
 //------------------------MODELS------------------------------------------------
 export 'package:cheat_chat/models/user_model.dart';
 export 'package:cheat_chat/models/chat_model.dart';
 export 'package:cheat_chat/models/other_user_model.dart';
 export 'package:cheat_chat/providers/data/other_user_provider.dart';
-
 
 //------------------------SERVICES----------------------------------------------
 export 'package:cheat_chat/services/shared_pref.dart';

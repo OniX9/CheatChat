@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen>
             : ChatButtonTypes.endChat;
         chatUIConsumer.updateChatButtonType(chatButtonType);
         // Fetch new user info
-        userConsumer.apiUpdateUser(context);
+        userConsumer.apiGetUser(context);
         // Update FCMToken
         FCMServices(context).initNotifications();
       }

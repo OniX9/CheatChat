@@ -80,6 +80,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - assets/svgs/
 
 
   #   - images/a_dot_ham.jpeg
