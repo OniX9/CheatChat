@@ -42,7 +42,7 @@ class OtherUserProvider with ChangeNotifier {
   Timer? _isOnlineTimer ;
   /// Refreshes online status(isOnline) countdown, based on last seen time
   Future<void> refreshOnlineStatus({required DateTime lastOnline}) async {
-    int maxOfflineDelay = 8;
+    int maxOfflineDelay = 30;
 
     int seconds_diff = DateTime.now().difference(lastOnline).inSeconds;
     // If seconds is negative, return 0,

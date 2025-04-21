@@ -19,10 +19,11 @@ class ChatProvider with ChangeNotifier {
     if (!_isTypingLock) {
       _isTypingLock = true;
       debugPrint("Typing lock deactivated");
-      await apiServices.refreshTypingStatus(context, token: token);
       Future.delayed(const Duration(seconds: 2), () {
         _isTypingLock = false;
+        notifyListeners();
       });
+      await apiServices.refreshTypingStatus(context, token: token);
     }
   }
 
@@ -34,7 +35,7 @@ class ChatProvider with ChangeNotifier {
       return;
     }
 
-    _onlineStatusTimer = Timer.periodic(const Duration(milliseconds: 5900), (timer) async {
+    _onlineStatusTimer = Timer.periodic(const Duration(seconds: 25), (timer) async {
       await apiServices.refreshOnlineStatus(context, token: token);
     });
   }

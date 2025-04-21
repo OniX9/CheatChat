@@ -88,7 +88,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                 ),
                 ProfileBox(
-                  isOnline: isOnline,
+                  isOnline: otherUserConsumer.isOnline,
                   userName: otherUser?.name ?? "",
                   imageUrl: otherUser?.profileUrl,
                 ),
