@@ -37,7 +37,11 @@ class UserProvider with ChangeNotifier {
   Future<UserModel?> apiCreateUser(BuildContext context) async {
     UserModel? formattedResult;
 
-    var newUser = await apiServices.createGuest(context);
+    String? fcmToken = await FCMServices(context).getFCMToken();
+    var newUser = await apiServices.createGuest(
+      context,
+      fcmToken: fcmToken,
+    );
 
     if (newUser != null) {
       formattedResult = UserModel.fromJson(newUser);
@@ -65,7 +69,8 @@ class UserProvider with ChangeNotifier {
   }
 
   /// 3. Update user profile
-  Future<UserModel?> apiUpdateUser(BuildContext context, {String? name, String? profilePicPath}) async {
+  Future<UserModel?> apiUpdateUser(BuildContext context,
+      {String? name, String? profilePicPath}) async {
     if (_user == null || _user?.token == null) return null;
     UserModel? formattedResult;
 
@@ -96,6 +101,7 @@ class UserProvider with ChangeNotifier {
     if (newUser != null) {
       formattedResult = UserModel.fromJson(newUser);
       _user = formattedResult;
+      debugPrint("CREATE CHATROOM RESPONSE: ${newUser}");
       await sharedPref.setUser(newUser);
     }
 
@@ -122,5 +128,4 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     return formattedResult;
   }
-
 }

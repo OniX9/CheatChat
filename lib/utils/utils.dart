@@ -5,7 +5,7 @@ class Utilities {
       BuildContext context,
       String message, {
         StyledToastPosition position = StyledToastPosition.top,
-        StyledToastAnimation animation = StyledToastAnimation.scale,
+        StyledToastAnimation animation = StyledToastAnimation.slideFromTop,
         Color? textColor = Colors.white,
         Color? backgroundColor = const Color(0xBB424242),
         Duration? duration = const Duration(seconds: 3),

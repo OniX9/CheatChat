@@ -68,9 +68,10 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
 
       utils.showLoadingScreen(context);
       var newUser = await userConsumer.apiCreateUser(context);
-      var userWithChatroom = await userConsumer.startChatRoom(context);
+      await userConsumer.startChatRoom(context);
+      utils.dialogPopper(context);
 
-      if (newUser != null && userWithChatroom != null) {
+      if (newUser != null) {
         Navigator.pushNamedAndRemoveUntil(
           context,
           ChatScreen.id,
@@ -125,7 +126,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          print('clicked Terms and Conditions');
+                          debugPrint('clicked Terms and Conditions');
                         }),
                   TextSpan(
                     text: ' ',
@@ -139,7 +140,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          print('clicked Privacy Policy');
+                          debugPrint('clicked Privacy Policy');
                         }),
                   TextSpan(
                     text: ' and ',
@@ -153,7 +154,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          print('clicked GuideLines');
+                          debugPrint('clicked GuideLines');
                         }),
                 ],
               ),
@@ -170,7 +171,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     ];
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 1100),
+      duration: const Duration(milliseconds: 800),
       decoration: kRoundedTopBoxDecoration,
       height: uiConsumer.startChatButtonState ? 640 : 320,
       child: ListView(

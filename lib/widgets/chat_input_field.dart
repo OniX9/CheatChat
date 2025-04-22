@@ -67,38 +67,70 @@ class ChatInputField extends StatelessWidget {
   }
 }
 
-class _LeftActionButton extends StatelessWidget {
+class _LeftActionButton extends StatefulWidget {
   _LeftActionButton({Key? key}) : super(key: key);
+
+  @override
+  State<_LeftActionButton> createState() => _LeftActionButtonState();
+}
+
+class _LeftActionButtonState extends State<_LeftActionButton> {
+  updateChatButtonType() {
+    var chatUIConsumer = Provider.of<ChatUIProvider>(context, listen: false);
+    var user = Provider.of<UserProvider>(context, listen: false).getUser;
+    if (user != null) {
+      // Set Chat button to NewChat, if user has already ended chat.
+      ChatButtonTypes chatButtonType = user.searching == true
+          ? ChatButtonTypes.newChat
+          : ChatButtonTypes.endChat;
+      chatUIConsumer.updateChatButtonType(chatButtonType);
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      updateChatButtonType();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final utils = Utilities();
     ChatUIProvider uiConsumer = Provider.of<ChatUIProvider>(context);
     UserProvider userConsumer = Provider.of<UserProvider>(context);
-    OtherUserProvider otherUserConsumer =
-        Provider.of<OtherUserProvider>(context);
+    OtherUserProvider otherUserConsumer = Provider.of<OtherUserProvider>(context);
     bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
 
-    Widget chatButtonContent() {
-      var chatActionButtonType = uiConsumer.chatButtonType;
-      late String label;
-      late Color? buttonColor;
+    var chatActionButtonType = uiConsumer.chatButtonType;
+    late String label;
+    late Color? buttonColor;
 
-      switch (chatActionButtonType) {
-        case ChatButtonTypes.endChat:
-          label = 'End chat?';
-          buttonColor = Colors.red;
-          break;
-        case ChatButtonTypes.youSure:
-          label = 'You sure?';
-          buttonColor = Colors.red;
-          break;
-        case ChatButtonTypes.newChat:
-          label = 'New chat';
-          buttonColor = Colors.blue[900];
-          break;
-      }
-      return Container(
+    switch (chatActionButtonType) {
+      case ChatButtonTypes.endChat:
+        label = 'End chat?';
+        buttonColor = Colors.red;
+        break;
+      case ChatButtonTypes.youSure:
+        label = 'You sure?';
+        buttonColor = Colors.red;
+        break;
+      case ChatButtonTypes.newChat:
+        label = 'New chat';
+        buttonColor = Colors.blue[900];
+        break;
+    }
+
+    return GestureDetector(
+      onTap: () {
+        if (isOnline) {
+          startOrEndChat(context);
+        } else {
+          utils.displayToastMessage(context, "Check your internet connection");
+        }
+      },
+      child: Container(
         width: 55,
         height: 50,
         margin: EdgeInsets.all(8),
@@ -111,29 +143,18 @@ class _LeftActionButton extends StatelessWidget {
           child: userConsumer.isChatRoomLoading || otherUserConsumer.isLoading
               ? const LoadingScreen(color: Colors.white)
               : Padding(
-                  padding: const EdgeInsets.only(left: 4),
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 40),
-                    child: Text(
-                      label,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(fontSize: 14, color: Colors.white),
-                    ),
-                  ),
-                ),
+            padding: const EdgeInsets.only(left: 4),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 40),
+              child: Text(
+                label,
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
+            ),
+          ),
         ),
-      );
-    }
-
-    return GestureDetector(
-      onTap: () {
-        if (isOnline) {
-          startOrEndChat(context);
-        } else {
-          utils.displayToastMessage(context, "Check your internet connection");
-        }
-      },
-      child: chatButtonContent(),
+      ),
     );
   }
 
@@ -148,7 +169,7 @@ class _LeftActionButton extends StatelessWidget {
         Provider.of<UserProvider>(context, listen: false);
     var user = userConsumer.getUser;
 
-    print("information");
+
     if (dataConsumer.isChatRoomLoading) return;
     if (uiConsumer.chatButtonType == ChatButtonTypes.newChat) {
       dataConsumer.startChatRoom(context).then((result) async {

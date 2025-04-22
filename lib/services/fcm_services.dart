@@ -60,7 +60,6 @@ class FCMServices {
     bool updateOtherUser = pushData['update_other_user'] == 'true';
     if (user?.token != null && updateOtherUser) {
       otherUserProvider.apiGetUser(context, token: user?.token);
-      print("Update other user Passed");
     }
     // 3. Is Other User Typing
     bool LastTypingString = pushData['last_typing'] != null;
@@ -94,8 +93,12 @@ class FCMServices {
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMsg);
   }
 
+  Future<String?> getFCMToken(){
+    return _firebaseMessaging.getToken();
+  }
+
   Future<void> updateFCMTokenToServer() async {
-    final fCMToken = await _firebaseMessaging.getToken();
+    final fCMToken = await getFCMToken();
 
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     var user = userProvider.getUser;
@@ -114,6 +117,7 @@ class FCMServices {
     await updateFCMTokenToServer();
   }
 }
+
 
 Future<void> handleBackgroundMsg(RemoteMessage message) async {
   // print('FCM Background Test');

@@ -16,8 +16,8 @@ class ApiService {
   // final GoogleSignIn _googleSignIn = GoogleSignIn();
   http_dio.Dio dio = http_dio.Dio();
 
-  static const API = 'https://cheatchat-backend.onrender.com/v1';
-  // static const API = 'http://10.0.2.2:5009/v1'; //LocalHost
+  // static const API = 'https://cheatchat-backend.onrender.com/v1';
+  static const API = 'http://10.0.2.2:5009/v1'; //LocalHost
 
   void initialise() {
     var options = BaseOptions(
@@ -54,7 +54,7 @@ class ApiService {
     _isTokenBad = false;
     var adminUserProvider = Provider.of<UserProvider>(context, listen: false);
 
-    print("_isTokenBad: ${responseData}");
+    debugPrint("_isTokenBad: ${responseData}");
 
     if (responseData['msg'] == 'Token has been revoked') {
       _utilities.displayToastMessage(
@@ -132,12 +132,14 @@ class ApiService {
 
   // ***USER***
 
-  Future<Map<String, dynamic>?> createGuest(BuildContext context) async {
+  Future<Map<String, dynamic>?> createGuest(BuildContext context,
+      {required String? fcmToken}) async {
     try {
       var response = await dio.post(
         '$API/guest-register',
+        data: {"fcm_token": fcmToken},
       );
-      print("Guest user: ${response.data}");
+      debugPrint("Guest user: ${response.data}");
       return response.data;
     } catch (e) {
       // ERROR HANDLING
@@ -197,6 +199,7 @@ class ApiService {
       {required String? token}) async {
     initiateDio(token);
     try {
+
       var response = await dio.post('$API/chatroom');
       return response.data;
     } catch (e) {

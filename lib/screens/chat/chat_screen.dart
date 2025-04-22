@@ -11,15 +11,16 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   ChatProvider? chatProvider;
+
   @override
   void initState() {
     var user = Provider.of<UserProvider>(context, listen: false).getUser;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (user != null) {
-        Provider.of<OtherUserProvider>(context, listen: false)
-            .apiGetUser(context, token: user.token);
+        // Start online polling
         chatProvider = Provider.of<ChatProvider>(context, listen: false);
         chatProvider?.apiStartOnlinePolling(context, token: user.token);
+        // FCM notifications
         FCMServices(context).initNotifications();
       }
     });
@@ -39,14 +40,16 @@ class _ChatScreenState extends State<ChatScreen> {
     var userConsumer = Provider.of<UserProvider>(context, listen: false);
     var user = userConsumer.getUser;
     bool isOnline = Provider.of<InternetCheckProvider>(context).isOnline;
+
     // Update other user once user isOnline, & if is not updated before.
-    Future.delayed(const Duration(milliseconds: 2500), () {
-      if (isOnline && otherUserConsumer.getUser == null && mounted) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          otherUserConsumer.apiGetUser(context, token: user?.token);
-        });
-      }
-    });
+    if (isOnline &&
+        otherUserConsumer.getUser == null &&
+        mounted &&
+        user?.chatRoom != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        otherUserConsumer.apiGetUser(context, token: user?.token);
+      });
+    }
 
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -370,7 +373,7 @@ class _ChatWindowState extends State<ChatWindow> {
     if (chatUIConsumer.chatButtonType == ChatButtonTypes.newChat) {
       utils.displayToastMessage(
         context,
-        'Chat ended, tap "New Chat"',
+        'No active chat, tap "New Chat"',
         position: StyledToastPosition.right,
         animation: StyledToastAnimation.slideFromBottom,
         backgroundColor: kAppBlue.withBlue(100),
